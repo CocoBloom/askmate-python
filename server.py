@@ -1,15 +1,17 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session
 import data_manager
 from datetime import datetime
 import time
 import os
 import util
 
+
 app = Flask(__name__)
 
 
 @app.route("/")
 def display_main_list():
+
     list_of_questions = data_manager.get_main_list(5)
     return render_template("mainlist.html", list_of_questions=list_of_questions)
 
@@ -237,8 +239,15 @@ def registration():
     if request.method == "POST":
         user_name = request.form['email']
         password = request.form['psw']
-        data_manager.new_registration(user_name=user_name,password=password)
-        return redirect('/list')
+        if data_manager.get_usernames(user_name) is False:
+            message = 'This username already exists. Please, choose another one!'
+            return render_template('wrong_username.html', message = message)
+        elif user_name == '' or password == '':
+            message = 'Please, complete all fields!'
+            return render_template('wrong_username.html', message = message)
+        else:
+            data_manager.new_registration(user_name=user_name,password=password)
+            return redirect('/list')
     return render_template('registration.html')
 
 
@@ -246,6 +255,19 @@ def registration():
 def login():
     return "LOGIN"
 
+
+@app.route('/users')
+def users():
+    # if 'username' not in session:
+    #     return redirect('/login')
+    # else:
+    users = data_manager.get_users()
+    return render_template('users.html', users = users)
+
+
+@app.route('/user/<user_name>')
+def user_details(user_name):
+    return "user_page of "+user_name
 
 
 if __name__ == "__main__":

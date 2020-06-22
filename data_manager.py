@@ -345,7 +345,6 @@ def create_new_tag(cursor,new_tag):
     tag_names=[]
     for tag in tags:
         tag_names.append(tag['name'])
-    print("tag_names",tag_names)
     if new_tag not in tag_names:
         id=util.get_new_tag_id()
         query= """INSERT INTO tag VALUES ( %(id)s, %(name)s )"""
@@ -354,6 +353,18 @@ def create_new_tag(cursor,new_tag):
     else:
         return "None"
 
+@connection.connection_handler
+def get_usernames(cursor,user_name):
+    query="""SELECT user_name FROM users"""
+    cursor.execute(query)
+    user_names= cursor.fetchall()
+    print("usernevek",user_names)
+    print(user_name)
+    for user in user_names:
+        if user['user_name'] == user_name:
+            return False
+    return True
+
 
 @connection.connection_handler
 def new_registration(cursor,user_name, password):
@@ -361,7 +372,16 @@ def new_registration(cursor,user_name, password):
     registration_date = datetime.now().replace(microsecond=0)
     reg_id = util.get_new_registration_id()
     user_id = util.get_new_user_id()
-    query = """INSERT INTO users VALUES (%(user_id)s, %(username)s, NULL, NULL, NULL, NULL);
+    query = """INSERT INTO users VALUES (%(user_id)s, %(username)s, 0, 0, 0, 0);
                 INSERT INTO registration VALUES (%(reg_id)s, %(username)s, %(hashed_psw)s, %(reg_date)s);
                 """
     cursor.execute(query, {'reg_id':reg_id, 'username':user_name, 'hashed_psw':hashed_password, 'user_id':user_id, 'reg_date':registration_date})
+
+
+@connection.connection_handler
+def get_users(cursor):
+    query = """SELECT * FROM users"""
+    cursor.execute(query)
+    users = cursor.fetchall()
+    print(users)
+    return users

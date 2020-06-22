@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<br>
+<p style="color: white">Click for registration <a style="color: white" href="/registration">Sign up</a> <a style="color: white">or for login <a style="color: white" href="/login">Sign in</a></p>
     <table >
         <thead>
             {% for question in list_of_questions%}
@@ -29,7 +31,8 @@
      <label  for="search_text">Search for question:</label>
      <input id="search_text" name="search_text" type="text">
      <button class="button">Search</button>
-     </form></caption>
+     </form>
+    <a style="color: white" href="/users">List of Users</a></caption>
         {% for row in list_of_questions%}
             <tr>
                 <td width="50"><a href="/question/{{row.id}}/increase_view_number"> {{row.id}} </a></td>
@@ -54,6 +57,6 @@
     </table>
     </form>
 
-    {% block main %}{% endblock %} <p>Click for registration <a href="/registration">Sign up</a> or for login<a href="/login">Sign in</a></p>
+    {% block main %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <table>
+      <caption style="color: white">List of Users</caption>
+        <thead>
+            {% for user in users %}
+            <tr>
+                {% if users.index(user) == 0 %}
+                    {% for title in user %}
+                        <th>{{ (title.upper()).replace('_',' ') }}</th><
+                    {% endfor %}
+                {% endif %}
+             </tr>
+            {% endfor %}
+        </thead>
+
+        {%  for user in users %}
+            <tbody>
+                <tr>
+                    <td> {{ user.id }}</td>
+                    <td><a href="/user/{{user.user_name}}"> {{ user.user_name }}</a></td>
+                    <td> {{ user.count_of_questions }}</td>
+                    <td> {{ user.answers }}</td>
+                    <td> {{ user.count_of_comments }}</td>
+                    <td> {{ user.reputation }}</td>
+                </tr>
+            </tbody>
+        {% endfor %}
+</table><br>
+<a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+
+</body>
+</html>
