@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New tag</title>
+      <style>
+         body {
+        background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
+        background-repeat: repeat;
+        background-attachment: fixed;
+        background-position: center;
+      }
+        .button {
+        background-color:  #3f87a6;
+        border: 2px solid white;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20%;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/question/{{ question_id }}/new-tag" method="POST">
+        <h1 style="color: white" for="tags">Choose a tag for the question:</h1>
+            {% block error_message %}{% endblock %}<br><br>
+          <select name="tag_name" id="tag_name">
+              {%  for tag in tags %}
+                    <option value={{ tag.name }}>{{ tag.name }}</option>
+              {%  endfor %}
+          </select><br><br>
+            <textarea name="new_tag_type"></textarea>
+          <br><br>
+          <input class="button" type="submit" value="Submit">
+    </form>
+    <br>
+    <a class="button" href="/question/{{ question_id }}">Back to the page of {{ question_id }}</a>
+</body>
+</html>

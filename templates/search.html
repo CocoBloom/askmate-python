@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search of questions</title>
+    <style>
+        body {
+        background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
+        background-repeat: repeat;
+        background-attachment: fixed;
+        background-position: center;}
+        thead,tfoot {background-color: #3f87a6;  color: #fff}
+        tbody {background-color: #e4f0f5;}
+        caption {padding: 50px; caption-side: top; text-align: center; font-size:30px}
+
+        table {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+        border: 2px solid rgb(200, 200, 200);
+        letter-spacing: 1px;
+        font-family: sans-serif;
+        font-size: .8rem;}
+
+        td,th {border: 1px solid rgb(190, 190, 190);
+        padding: 5px 10px;}
+        td {text-align: center;}
+
+        .vanish { border-color: #e4f0f5;)}
+
+        .button {
+        margin-left: auto;
+        margin-right: auto;
+        background-color:  #3f87a6;
+        border: 2px solid white;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20%; }
+
+        #caption{ color: white;}
+
+    </style>
+</head>
+<body>
+    <table >
+        <thead>
+            {% for question in list_of_questions%}
+                <tr>
+                    {% if list_of_questions.index(question) == 0 %}
+                        {%for detail in question%}
+                            <th><form action="http://localhost:8000/search" method="GET">
+                            <input type="hidden" name="order_by" value="{{detail}}">{{ (detail.upper()).replace('_',' ') }}
+                            </form> </th>
+                        {%endfor%}
+                    {% endif %}
+                </tr>
+            {%endfor%}
+        </thead>
+    <caption id="caption"><img src="static/buttons/banner.png" alt="Ask-Question-Ask-Mate" width="120"><br>ASK_MATE<br>
+    <a href="add-question"><img src="static/buttons/realwhitebutton.png" alt="Ask-Question-Ask-Mate" width="60"></a>
+     <form action="/search" method="GET">
+     <label  for="search_text">Search for question:</label>
+     <input id="search_text" name="search_text" type="text">
+     <button class="button" id="search_button">Search</button>
+     </form></caption>
+        {% for row in list_of_questions%}
+            <tr>
+                <td width="50"><a href={{url_for('increase_view_number', question_id=row.id)}}> {{row.id}} </a></td>
+                <td width="150">{{ row.submission_time }}</td>
+                <td width="60">{{ row.view_number }}</td>
+                <td width="60">{{ row.vote_number }}</td>
+                <td width="100">
+                {% if search_text == row.title %}
+                    <mark>{{search_text}}</mark>
+                {% elif search_text in row.title %}
+                    {% set title_list = row.title.split(search_text)%}
+                        {% for list_element in title_list%}
+                        {% if title_list.index(list_element) != 0%}
+                            <mark>{{search_text}}</mark>{{list_element}}
+                        {% else %}
+                            {{list_element}}
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ row.title }}
+                    {% endif %}
+                    </td>
+                <td width="200">
+                {% if search_text == row.message %}
+                    <mark>{{search_text}}</mark>
+                {% elif search_text in row.message %}
+                    {% set title_list = row.message.split(search_text)%}
+                        {% for list_element in title_list%}
+                        {% if title_list.index(list_element) != 0%}
+                            <mark>{{search_text}}</mark>{{list_element}}
+                        {% else %}
+                            {{list_element}}
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ row.message }}
+                    {% endif %}
+                    </td>
+                {% if row.image is not none and row.image != ''%}
+                    <td><img src="{{ row.image }}" alt="pimpirimpi" height="100"></td>
+                {%else%}
+                    <td height = "80"> </td>
+                {% endif %}
+                <td width="200">
+                {% if row.answer_message is none %}
+
+                {% else %}
+                    {% if search_text == row.answer_message %}
+                        <mark>{{search_text}}</mark>
+                    {% elif search_text in row.answer_message %}
+                        {% set title_list = row.answer_message.split(search_text)%}
+                            {% for list_element in title_list%}
+                            {% if title_list.index(list_element) != 0%}
+                                <mark>{{search_text}}</mark>{{list_element}}
+                            {% else %}
+                                {{list_element}}
+                            {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {{ row.answer_message }}
+                        {% endif %}
+                    {% endif %}
+                    </td>
+            </tr>
+        {%endfor%}
+    </table>
+    </form>
+    <br><br>
+    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+    {% block main %}{% endblock %}
+</body>
