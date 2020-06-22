@@ -4,27 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add comment to the question!</title>
-    <style>
-         body {
-        background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
-        background-repeat: repeat;
-        background-attachment: fixed;
-        background-position: center;
-      }
-        .button {
-        background-color:  #3f87a6;
-        border: 2px solid white;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 20%;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <form action="/question/{{ question_id }}/new-comment" method="post">

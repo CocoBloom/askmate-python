@@ -1,28 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <style>
-        body {
-        background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
-        background-repeat: repeat;
-        background-attachment: fixed;
-        background-position: center;
-      }
-    .button {
-        background-color:  #3f87a6;
-        border: 2px solid white;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 20%;
-        }
-       h1,h2,h3,td {color:white;}
-        </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
     <title>Edit answer</title>
 </head>
