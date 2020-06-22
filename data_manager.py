@@ -257,7 +257,6 @@ def create_new_comment(answer_comment, answer_id, question_id):
         "answer_comment": answer_comment,
         "answer_id": answer_id
     }
-    print(new_comment)
     comment_to_answer(new_comment)
 
 
@@ -354,3 +353,15 @@ def create_new_tag(cursor,new_tag):
         return "true"
     else:
         return "None"
+
+
+@connection.connection_handler
+def new_registration(cursor,user_name, password):
+    hashed_password = util.hash_password(password=password)
+    registration_date = datetime.now().replace(microsecond=0)
+    reg_id = util.get_new_registration_id()
+    user_id = util.get_new_user_id()
+    query = """INSERT INTO users VALUES (%(user_id)s, %(username)s, NULL, NULL, NULL, NULL);
+                INSERT INTO registration VALUES (%(reg_id)s, %(username)s, %(hashed_psw)s, %(reg_date)s);
+                """
+    cursor.execute(query, {'reg_id':reg_id, 'username':user_name, 'hashed_psw':hashed_password, 'user_id':user_id, 'reg_date':registration_date})

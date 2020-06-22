@@ -1,5 +1,6 @@
 import connection
 import os
+import bcrypt
 
 @connection.connection_handler
 def get_new_question_id(cursor):
@@ -38,3 +39,30 @@ def get_new_tag_id(cursor):
     cursor.execute(query)
     new_id = cursor.fetchall()[0]['max'] + 1
     return new_id
+
+@connection.connection_handler
+def get_new_user_id(cursor):
+    query = """SELECT MAX(id) FROM users;"""
+    cursor.execute(query)
+    new_id = cursor.fetchall()[0]['max'] + 1
+    print("new_id:", new_id)
+    return new_id
+
+@connection.connection_handler
+def get_new_registration_id(cursor):
+    query = """SELECT MAX(id) FROM registration;"""
+    cursor.execute(query)
+    new_id = cursor.fetchall()[0]['max'] + 1
+    print("new_id:",new_id)
+    return new_id
+
+
+def hash_password(password):
+    # By using bcrypt, the salt is saved into the hash itself
+    hashed_bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_bytes_password)

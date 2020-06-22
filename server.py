@@ -232,6 +232,22 @@ def increase_view_number(question_id):
     return redirect('/question/' + str(question_id))
 
 
+@app.route('/registration', methods=["GET", "POST"])
+def registration():
+    if request.method == "POST":
+        user_name = request.form['email']
+        password = request.form['psw']
+        data_manager.new_registration(user_name=user_name,password=password)
+        return redirect('/list')
+    return render_template('registration.html')
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    return "LOGIN"
+
+
+
 if __name__ == "__main__":
     app.run(debug=True,
             port=8000,

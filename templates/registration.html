@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <style>
+        body {
+        background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
+        background-repeat: repeat;
+        background-attachment: fixed;
+        background-position: center;}
+        thead,tfoot {background-color: #3f87a6;  color: #fff}
+        tbody {background-color: #e4f0f5;}
+        caption {padding: 50px; caption-side: top; text-align: center; font-size:30px}
+
+        table {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+        border: 2px solid rgb(200, 200, 200);
+        letter-spacing: 1px;
+        font-family: sans-serif;
+        font-size: .8rem;}
+
+        td,th {border: 1px solid rgb(190, 190, 190);
+        padding: 5px 10px;}
+        td {text-align: center;}
+
+        .vanish { border-color: #e4f0f5;)}
+
+        .button {
+        margin-left: auto;
+        margin-right: auto;
+        background-color:  #3f87a6;
+        border: 2px solid white;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20%; }
+
+        #caption{ color: white;}
+
+    </style>
+</head>
+<body>
+    <form action="/registration" method="POST">
+  <div class="container">
+    <h1>Register</h1>
+    <p>Please fill in this form to create an account.</p>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" name="email" id="email" ><br><br>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" id="psw" ><br>
+
+    <hr>
+
+
+    <button type="submit" class="registerbtn">Register</button>
+  </div>
+
+  <div class="container signin">
+    <p>Already have an account? <a href="/login">Sign in</a>.</p>
+  </div>
+</form>
+</body>
+</html>
