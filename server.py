@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, session
+from flask import Flask, request, render_template, redirect, session, url_for, escape
 import data_manager
 from datetime import datetime
 import time
@@ -8,23 +8,32 @@ import util
 
 app = Flask(__name__)
 
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 
 @app.route("/")
 def display_main_list():
-
+    if 'username' in session:
+        message = 'Logged in as %s' % escape(session['username'])
+    else:
+        message = ''
     list_of_questions = data_manager.get_main_list(5)
-    return render_template("mainlist.html", list_of_questions=list_of_questions)
+    return render_template("mainlist.html",login_message=message, list_of_questions=list_of_questions)
 
 
 @app.route('/list')
 def display_list():
+    if 'username' in session:
+        message= 'Logged in as %s' % escape(session['username'])
+    else:
+        message = ''
     mode = request.args.get('order_by')
     direction = request.args.get('order_direction')
     if mode:
         list_of_questions = data_manager.get_display_list(mode, direction)
     else:
         list_of_questions = data_manager.get_display_list()
-    return render_template("list.html", list_of_questions=list_of_questions)
+    return render_template("list.html",login_message=message, list_of_questions=list_of_questions)
 
 
 @app.route("/question/<int:question_id>")
@@ -234,6 +243,8 @@ def increase_view_number(question_id):
     return redirect('/question/' + str(question_id))
 
 
+
+
 @app.route('/registration', methods=["GET", "POST"])
 def registration():
     if request.method == "POST":
@@ -251,9 +262,30 @@ def registration():
     return render_template('registration.html')
 
 
-@app.route('/login', methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return "LOGIN"
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if data_manager.get_usernames(username) is False:
+            reg_password = data_manager.get_password(username)
+            is_matching = util.verify_password(password, reg_password)
+            if is_matching:
+                session['username'] = request.form['username']
+                return redirect(url_for('display_list'))
+            else:
+                message = "Wrong password!"
+                return render_template('login_fail.html', message=message)
+        else:
+            message = "Not registered!"
+            return render_template('login_fail.html', message=message)
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('display_list'))
 
 
 @app.route('/users')
@@ -268,6 +300,7 @@ def users():
 @app.route('/user/<user_name>')
 def user_details(user_name):
     return "user_page of "+user_name
+
 
 
 if __name__ == "__main__":
