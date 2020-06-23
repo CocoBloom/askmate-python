@@ -336,6 +336,13 @@ def user_details(user_name):
     return "user_page of "+user_name
 
 
+@app.route('/answer/<answer_id>/accept_answer')
+@authenticate
+def accept_answer(answer_id):
+    question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
+    return redirect('/question/' + str(question_id))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True,
