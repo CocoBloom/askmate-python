@@ -340,7 +340,11 @@ def user_details(user_name):
 @authenticate
 def accept_answer(answer_id):
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
-    return redirect('/question/' + str(question_id))
+    try:
+        user_id = data_manager.get_user_details_by_username(session['username'])['id']
+        data_manager.change_acceptance(answer_id, user_id)
+    finally:
+        return redirect('/question/' + str(question_id))
 
 
 

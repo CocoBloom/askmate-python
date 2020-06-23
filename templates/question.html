@@ -82,7 +82,12 @@
         <table style="width:50%">
         <tr style="height:100px" >
             <td>> {{ answer.submission_time }} </td>
-            <td> {{ answer.message }} </td>
+            {% if answer.if_accepted == 1 %}
+                        <td style="color:crimson">
+                    {%  else %}
+                        <td>
+                    {%  endif %}
+            {{ answer.message }} </td>
             <td>{% if answer.image is not none and answer.image != ''%}
                     <img src="/{{ answer.image }}" alt="pimpirimpi" height="100">
                 {% endif %}
@@ -112,7 +117,13 @@
             </td>
             <td>
                 <form action="{{url_for('accept_answer', answer_id= answer.id )}}" >
-                <button class="button"><i class="fas fa-umbrella-beach">A</i></button>
+                <button class="button"><i class="fas fa-umbrella-beach">
+                    {% if answer.if_accepted == 1 %}
+                        Remove state
+                    {%  else %}
+                        Accept
+                    {%  endif %}
+                </i></button>
                 </form>
             </td>
         </tr>

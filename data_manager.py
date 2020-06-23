@@ -396,3 +396,29 @@ def get_password(cursor, username):
     password = cursor.fetchone()['user_password']
     print (password)
     return password
+
+
+@connection.connection_handler
+def get_user_details_by_username(cursor,username):
+    query = """
+       SELECT * 
+       FROM users
+       WHERE user_name = %(username)s"""
+    cursor.execute(query, {"username": username})
+    user_details = cursor.fetchone()
+    return user_details
+
+
+@connection.connection_handler
+def change_acceptance(cursor,answer_id, user_id):
+    query="""
+    UPDATE answer
+    SET if_accepted =
+    CASE 
+    WHEN if_accepted = true THEN false
+    ELSE true
+    END
+    WHERE id = %(answer_id)s AND user_id = %(user_id)s
+    """
+    cursor.execute(query, {"answer_id": answer_id, "user_id": user_id})
+
