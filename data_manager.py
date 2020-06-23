@@ -408,12 +408,19 @@ def get_password(cursor, username):
 
 @connection.connection_handler
 def get_user_questions(cursor,user_name):
-    print(user_name)
     query = """SELECT question.id, question.title FROM question LEFT JOIN users ON user_id = users.id WHERE users.user_name =%(user_name)s"""
     cursor.execute(query, {'user_name':user_name})
     user_questions = cursor.fetchall()
     print("user_questions",user_questions)
     return user_questions
+
+@connection.connection_handler
+def get_user_answers(cursor,user_name):
+    query = """SELECT question_id, message FROM answer LEFT JOIN users ON user_id = users.id  WHERE users.user_name =%(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_answers = cursor.fetchall()
+    print("user_answers",user_answers)
+    return user_answers
 
 @connection.connection_handler
 def get_user_id_by_username(cursor, username):

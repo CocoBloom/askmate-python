@@ -334,9 +334,9 @@ def users():
 def user_details(user_name):
     user_detail = data_manager.get_user_details(user_name=user_name)
     user_questions = data_manager.get_user_questions(user_name=user_name)
-    #user_answers = data_manager.get_user_answers(user_name=user_name)
+    user_answers = data_manager.get_user_answers(user_name=user_name)
 
-    return render_template('user_details.html',user_name=user_name, user_details=user_detail,user_questions=user_questions)
+    return render_template('user_details.html',user_name=user_name, user_details=user_detail,user_questions=user_questions, user_answers=user_answers)
 
 
 

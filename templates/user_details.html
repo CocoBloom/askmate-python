@@ -44,8 +44,8 @@
 
     <label>Answers that the user created</label>
     <table>
-        {% for answer in answers %}
-            <tr><td>{{ answer.id }}</td><td>{{ answer.title }}</td></tr>
+        {% for answer in user_answers %}
+            <tr><td><a href="/question/{{ answer.question_id }}">{{ answer.question_id }}</a></td><td>{{ answer.message }}</td></tr>
         {% endfor %}
     </table><br>
 </body>
