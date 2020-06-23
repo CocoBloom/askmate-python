@@ -40,8 +40,10 @@ def display_list():
         message = ''
     mode = request.args.get('order_by')
     direction = request.args.get('order_direction')
+    print("mode",mode)
+    print("direction",direction)
     if mode:
-        list_of_questions = data_manager.get_display_list(mode, direction)
+        list_of_questions = data_manager.get_ordered_list(mode=mode, direction=direction)
     else:
         list_of_questions = data_manager.get_display_list()
     return render_template("list.html",login_message=message, list_of_questions=list_of_questions)

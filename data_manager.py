@@ -48,12 +48,26 @@ def delete_answer_by_id(cursor, answer_id):
 
 
 @connection.connection_handler
-def get_display_list(cursor: RealDictCursor, mode='submission_time', direction='DESC') -> list:
-    cursor.execute(f"""
-    SELECT * 
+def get_ordered_list(cursor, mode, direction) -> object:
+    query = """SELECT question.id,users.user_name,submission_time,view_number,vote_number,title,message,image
     FROM question
-    ORDER BY {mode} {direction}""")
-    return cursor.fetchall()
+    JOIN users
+    ON user_id=users.id
+    ORDER BY %(mode)s %(direction)s"""
+    cursor.execute(query,{'mode':mode,'direction':direction})
+    list_of_questions = cursor.fetchall()
+    return list_of_questions
+
+@connection.connection_handler
+def get_display_list(cursor) -> object:
+    query = """SELECT question.id,users.user_name,submission_time,view_number,vote_number,title,message,image
+    FROM question
+    JOIN users
+    ON user_id=users.id
+    ORDER BY submission_time DESC"""
+    cursor.execute(query)
+    list_of_questions = cursor.fetchall()
+    return list_of_questions
 
 
 @connection.connection_handler
