@@ -65,8 +65,9 @@ def add_question():
         dictionary_of_questions = data_manager.create_new_question()
         file = request.files['questionimage']
         image = util.get_image_name(file)
+        user_id = data_manager.get_user_id_by_username(session['username'])
         dictionary_of_questions.update(
-            {'title': request.form.get('questiontitle'), 'message': request.form.get('questionbody'), 'image': image})
+            {'user_id': user_id, 'title': request.form.get('questiontitle'), 'message': request.form.get('questionbody'), 'image': image})
         data_manager.write_to_questions(dictionary_of_questions)
         return redirect('/list')
     else:
@@ -284,10 +285,10 @@ def registration():
         password = request.form['psw']
         if data_manager.get_usernames(user_name) is False:
             message = 'This username already exists. Please, choose another one!'
-            return render_template('registration_incorrect.html.html', message = message)
+            return render_template('registration_incorrect.html', message = message)
         elif user_name == '' or password == '':
             message = 'Please, complete all fields!'
-            return render_template('registration_incorrect.html.html', message = message)
+            return render_template('registration_incorrect.html', message = message)
         else:
             data_manager.new_registration(user_name=user_name,password=password)
             return redirect('/list')

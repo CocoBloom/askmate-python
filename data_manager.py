@@ -58,9 +58,9 @@ def get_display_list(cursor: RealDictCursor, mode='submission_time', direction='
 
 @connection.connection_handler
 def write_to_questions(cursor, dictionary):
-    query = """INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, 
+    query = """INSERT INTO question VALUES (%(id_value)s, %(user_id)s, %(submission_time_value)s, %(view_number_value)s, 
                         %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);"""
-    cursor.execute(query, {'id_value': dictionary['id'], 'submission_time_value': dictionary['submission_time'],
+    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'], 'submission_time_value': dictionary['submission_time'],
                            'view_number_value': dictionary['view_number'],
                            'vote_number_value': dictionary['vote_number'], 'title_value': dictionary['title'],
                            'message_value': dictionary['message'], 'image_value': dictionary['image']})
@@ -404,3 +404,13 @@ def get_password(cursor, username):
     password = cursor.fetchone()['user_password']
     print (password)
     return password
+
+@connection.connection_handler
+def get_user_id_by_username(cursor, username):
+    query = '''
+        SELECT id FROM users
+        WHERE user_name = %(username)s;
+    '''
+    cursor.execute(query, {'username': username})
+    user_id = cursor.fetchone()['id']
+    return user_id
