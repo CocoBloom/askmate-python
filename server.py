@@ -284,10 +284,10 @@ def registration():
         password = request.form['psw']
         if data_manager.get_usernames(user_name) is False:
             message = 'This username already exists. Please, choose another one!'
-            return render_template('registration_incorrect.html.html', message = message)
+            return render_template('registration_incorrect.html', message = message)
         elif user_name == '' or password == '':
             message = 'Please, complete all fields!'
-            return render_template('registration_incorrect.html.html', message = message)
+            return render_template('registration_incorrect.html', message = message)
         else:
             data_manager.new_registration(user_name=user_name,password=password)
             return redirect('/list')
@@ -331,7 +331,8 @@ def users():
 @authenticate
 def user_details(user_name):
     user_detail = data_manager.get_user_details(user_name=user_name)
-    return render_template('user_details.html',user_name=user_name, user_details=user_detail)
+    user_questions = data_manager.get_user_questions(user_name)
+    return render_template('user_details.html',user_name=user_name, user_details=user_detail,user_questions=user_questions)
 
 
 
