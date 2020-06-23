@@ -407,6 +407,15 @@ def get_password(cursor, username):
     return password
 
 @connection.connection_handler
+def get_user_questions(cursor,user_name):
+    print(user_name)
+    query = """SELECT question.id, question.title FROM question LEFT JOIN users ON user_id = users.id WHERE users.user_name =%(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_questions = cursor.fetchall()
+    print("user_questions",user_questions)
+    return user_questions
+
+@connection.connection_handler
 def get_user_id_by_username(cursor, username):
     query = '''
         SELECT id FROM users

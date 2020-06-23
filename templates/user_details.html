@@ -33,8 +33,20 @@
         <tr><td>Count of Comments</td><td>{{ detail.count_of_comments }}</td></tr>
         <tr><td>Reputation</td><td>{{ detail.reputation }}</td></tr>
     {%  endfor %}
-    </table>
+    </table><br>
 
-    <label></label>
+    <label>Questions that the user created</label>
+    <table>
+        {% for question in user_questions %}
+            <tr><td><a href="/question/{{ question.id }}" >{{ question.id }}</a></td><td>{{ question.title }}</td></tr>
+        {% endfor %}
+    </table><br>
+
+    <label>Answers that the user created</label>
+    <table>
+        {% for answer in answers %}
+            <tr><td>{{ answer.id }}</td><td>{{ answer.title }}</td></tr>
+        {% endfor %}
+    </table><br>
 </body>
 </html>
