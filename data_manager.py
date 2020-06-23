@@ -58,9 +58,9 @@ def get_display_list(cursor: RealDictCursor, mode='submission_time', direction='
 
 @connection.connection_handler
 def write_to_questions(cursor, dictionary):
-    query = """INSERT INTO question VALUES (%(id_value)s, %(submission_time_value)s, %(view_number_value)s, 
+    query = """INSERT INTO question VALUES (%(id_value)s, %(user_id)s, %(submission_time_value)s, %(view_number_value)s, 
                         %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);"""
-    cursor.execute(query, {'id_value': dictionary['id'], 'submission_time_value': dictionary['submission_time'],
+    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'], 'submission_time_value': dictionary['submission_time'],
                            'view_number_value': dictionary['view_number'],
                            'vote_number_value': dictionary['vote_number'], 'title_value': dictionary['title'],
                            'message_value': dictionary['message'], 'image_value': dictionary['image']})
@@ -211,17 +211,18 @@ def get_question_id_by_answer_id(cursor: RealDictCursor, answer_id) -> list:
 
 @connection.connection_handler
 def write_to_answers(cursor, dictionary):
-    query = """INSERT INTO answer VALUES (%(id_value)s, %(submission_time_value)s, %(vote_number_value)s, 
+    query = """INSERT INTO answer VALUES (%(id_value)s, %(user_id)s, %(submission_time_value)s, %(vote_number_value)s, 
                     %(question_id_value)s, %(message_value)s, %(image_value)s);"""
-    cursor.execute(query, {'id_value': dictionary['id'], 'submission_time_value': dictionary['submission_time'],
+    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'], 'submission_time_value': dictionary['submission_time'],
                            'vote_number_value': dictionary['vote_number'],
                            'question_id_value': dictionary['question_id'], 'message_value': dictionary['message'],
                            'image_value': dictionary['image']})
 
 
-def create_new_answer(answer, question_id, image):
+def create_new_answer(answer, question_id, image, user_id):
     new_answer = {
         "id": util.get_new_answer_id(),
+        "user_id": user_id,
         "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": 0,
         "question_id": question_id,
@@ -241,18 +242,20 @@ def get_comments(cursor, question_id):
 @connection.connection_handler
 def comment_to_answer(cursor, new_comment):
     query = """INSERT INTO comment VALUES
-               (%(id)s, NULL, %(answer_id)s, %(answer_comment)s, %(submission_time)s );"""
-
+               (%(id)s, %(user_id)s, NULL, %(answer_id)s, %(answer_comment)s, %(submission_time)s );"""
+    print(query)
     cursor.execute(query, {'id': new_comment['id'],
-
+                           'user_id': new_comment['user_id'],
                            'answer_id': new_comment['answer_id'],
                            'answer_comment': new_comment['answer_comment'],
                            'submission_time': new_comment['submission_time']})
 
 
-def create_new_comment(answer_comment, answer_id, question_id):
+def create_new_comment(answer_comment, user_id, answer_id, question_id):
     new_comment = {
         'id': util.get_new_comment_id(),
+        'user_id': user_id,
+        'question_id': question_id,
         "submission_time": datetime.now().replace(microsecond=0),
         "answer_comment": answer_comment,
         "answer_id": answer_id
@@ -270,17 +273,18 @@ def delete_comment(cursor, comment_id):
 @connection.connection_handler
 def comment_to_question(cursor, new_comment):
     query = """INSERT INTO comment VALUES
-               (%(id)s, %(question_id)s, NULL, %(question_comment)s, %(submission_time)s );"""
+               (%(id)s, %(user_id)s, %(question_id)s, NULL, %(question_comment)s, %(submission_time)s );"""
 
-    cursor.execute(query, {'id':new_comment['id'],
+    cursor.execute(query, {'id':new_comment['id'], 'user_id': new_comment['user_id'],
                            'question_id': new_comment['question_id'],
                            'question_comment': new_comment['question_comment'],
                            'submission_time': new_comment['submission_time'] })
 
 
-def create_question_comment(question_comment, question_id):
+def create_question_comment(question_comment, user_id, question_id):
     new_comment = {
         'id': util.get_new_comment_id(),
+        'user_id': user_id,
         "submission_time": datetime.now().replace(microsecond=0),
         "question_id": question_id,
         "question_comment": question_comment,
@@ -366,6 +370,23 @@ def get_usernames(cursor,user_name):
 
 
 @connection.connection_handler
+def get_users(cursor):
+    query = """SELECT * FROM users"""
+    cursor.execute(query)
+    users = cursor.fetchall()
+    return users
+
+
+@connection.connection_handler
+def get_user_details(cursor,user_name):
+    query = """SELECT * FROM users WHERE user_name = %(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_details = cursor.fetchall()
+    print(user_details)
+    return user_details
+
+
+@connection.connection_handler
 def new_registration(cursor,user_name, password):
     hashed_password = util.hash_password(password=password)
     registration_date = datetime.now().replace(microsecond=0)
@@ -375,15 +396,6 @@ def new_registration(cursor,user_name, password):
                 INSERT INTO registration VALUES (%(reg_id)s, %(username)s, %(hashed_psw)s, %(reg_date)s);
                 """
     cursor.execute(query, {'reg_id':reg_id, 'username':user_name, 'hashed_psw':hashed_password, 'user_id':user_id, 'reg_date':registration_date})
-
-
-@connection.connection_handler
-def get_users(cursor):
-    query = """SELECT * FROM users"""
-    cursor.execute(query)
-    users = cursor.fetchall()
-    print(users)
-    return users
 
 
 @connection.connection_handler
@@ -422,3 +434,60 @@ def change_acceptance(cursor,answer_id, user_id):
     """
     cursor.execute(query, {"answer_id": answer_id, "user_id": user_id})
 
+
+
+@connection.connection_handler
+def get_user_questions(cursor,user_name):
+    query = """SELECT question.id, question.title FROM question LEFT JOIN users ON user_id = users.id WHERE users.user_name =%(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_questions = cursor.fetchall()
+    print("user_questions",user_questions)
+    return user_questions
+
+@connection.connection_handler
+def get_user_answers(cursor,user_name):
+    query = """SELECT question_id, message FROM answer LEFT JOIN users ON user_id = users.id  WHERE users.user_name =%(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_answers = cursor.fetchall()
+    print("user_answers",user_answers)
+    return user_answers
+
+@connection.connection_handler
+def get_user_comments(cursor,user_name):
+    query = """SELECT comment.message,
+       CASE
+           WHEN comment.question_id IS NULL THEN answer.question_id
+           ELSE comment.question_id
+       END
+    FROM comment
+    LEFT JOIN users
+    ON comment.user_id = users.id
+    LEFT JOIN answer
+    ON comment.answer_id = answer.id
+    WHERE users.user_name = %(user_name)s;"""
+    cursor.execute(query, {'user_name':user_name})
+    user_comments = cursor.fetchall()
+    print("user_answers",user_comments)
+    return user_comments
+
+@connection.connection_handler
+def get_user_id_by_username(cursor, username):
+    query = '''
+        SELECT id FROM users
+        WHERE user_name = %(username)s;
+    '''
+    cursor.execute(query, {'username': username})
+    user_id = cursor.fetchone()['id']
+    return user_id
+
+@connection.connection_handler
+def count_tags(cursor):
+    query="""
+    SELECT tag.name, COUNT(question_id) FROM question_tag
+        LEFT JOIN tag
+            ON question_tag.tag_id = tag.id
+    WHERE question_tag.tag_id = tag.id
+    GROUP BY tag.name;"""
+    cursor.execute(query)
+    count_of_tags = cursor.fetchall()
+    return count_of_tags

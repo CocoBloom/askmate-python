@@ -2,7 +2,7 @@
 <html lang="en">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
     <meta charset="UTF-8">
     <title>Question | Ask mate</title>
 </head>
@@ -24,6 +24,7 @@
                 <button class="button">Add a new tag</button>
                 </form>
     </table>
+    <a href="/tags">Check tags</a>
     <br>
 
     <h2> {{ question.title }}</h2>

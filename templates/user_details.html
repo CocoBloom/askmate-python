@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>User Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
+    <style> table {
+        border-collapse: collapse;
+        border: 2px solid rgb(200, 200, 200);
+        letter-spacing: 1px;
+        font-family: sans-serif;
+        font-size: .8rem;}
+
+        td,th {border: 1px solid rgb(190, 190, 190);
+        padding: 5px 10px;}
+
+        td {text-align: center;}
+
+        .vanish { border-color: #e4f0f5;)}
+        </style>
+</head>
+<body>
+
+    <label style="color:white;">User Details of {{  user_name }}:</label><br><br>
+    <table >
+    {% for detail in user_details %}
+        <tr><td> ID</td><td>{{ detail.id }}</td></tr>
+        <tr><td>User Name</td><td>{{ detail.user_name }}</td></tr>
+        <tr><td>Count of Questions</td><td>{{ detail.count_of_questions }}</td></tr>
+        <tr><td>Count of Answers</td><td>{{ detail.count_of_answers }}</td></tr>
+        <tr><td>Count of Comments</td><td>{{ detail.count_of_comments }}</td></tr>
+        <tr><td>Reputation</td><td>{{ detail.reputation }}</td></tr>
+    {%  endfor %}
+    </table><br>
+
+    <label>Questions that the user created</label>
+    <table>
+        {% for question in user_questions %}
+            <tr><td><a href="/question/{{ question.id }}" >{{ question.id }}</a></td><td>{{ question.title }}</td></tr>
+        {% endfor %}
+    </table><br>
+
+    <label>Answers that the user created</label>
+    <table>
+        {% for answer in user_answers %}
+            <tr><td><a href="/question/{{ answer.question_id }}">{{ answer.question_id }}</a></td><td>{{ answer.message }}</td></tr>
+        {% endfor %}
+    </table><br>
+
+    <label>Comments that the user created</label>
+    <table>
+        {% for comment in user_comments %}
+            <tr><td><a href="/question/{{ comment.question_id }}">{{ comment.question_id }}</a></td><td>{{ comment.message }}</td></tr>
+        {% endfor %}
+    </table><br>
+</body>
+</html>

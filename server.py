@@ -65,8 +65,9 @@ def add_question():
         dictionary_of_questions = data_manager.create_new_question()
         file = request.files['questionimage']
         image = util.get_image_name(file)
+        user_id = data_manager.get_user_id_by_username(session['username'])
         dictionary_of_questions.update(
-            {'title': request.form.get('questiontitle'), 'message': request.form.get('questionbody'), 'image': image})
+            {'user_id': user_id, 'title': request.form.get('questiontitle'), 'message': request.form.get('questionbody'), 'image': image})
         data_manager.write_to_questions(dictionary_of_questions)
         return redirect('/list')
     else:
@@ -150,9 +151,10 @@ def edit_comment(comment_id):
 def add_new_answer(question_id):
     if request.method == "POST":
         new_answer = request.form["answer"]
+        user_id = data_manager.get_user_id_by_username(session['username'])
         file = request.files['img']
         image = util.get_image_name(file)
-        data_manager.create_new_answer(new_answer, question_id, image)
+        data_manager.create_new_answer(new_answer, question_id, image, user_id)
         return redirect("/question/" + question_id)
     else:
         return render_template("new_answer.html", question_id=question_id)
@@ -173,7 +175,8 @@ def add_comment_to_answer(answer_id):
     if request.method == 'POST':
         question_id = (data_manager.get_question_id(answer_id))['question_id']
         answer_comment = request.form['answer_comment']
-        data_manager.create_new_comment(answer_comment, answer_id=answer_id, question_id=question_id)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        data_manager.create_new_comment(answer_comment, user_id, answer_id=answer_id, question_id=question_id)
         return redirect('/question/' + str(question_id))
     return render_template('add_cooment_to_answer.html', answer_id=answer_id)
 
@@ -183,7 +186,8 @@ def add_comment_to_answer(answer_id):
 def add_comment_to_question(question_id):
     if request.method == 'POST':
         question_comment = request.form['question_comment']
-        data_manager.create_question_comment(question_comment, question_id=question_id)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        data_manager.create_question_comment(question_comment, user_id, question_id=question_id)
         return redirect('/question/' + str(question_id))
     else:
         return render_template('comment_to_question.html', question_id=question_id)
@@ -251,17 +255,17 @@ def add_new_tag(question_id):
                 data_manager.add_new_tag(tag_id=tag_id, question_id=question_id)
             except:
                 tags = data_manager.get_tags()
-                return render_template('error_tag.html',tags=tags, question_id=question_id)
+                return render_template('tag_problem.html',tags=tags, question_id=question_id)
         else:
             if data_manager.create_new_tag(new_tag=new_tag_type) != "None":
                 tag_id=data_manager.get_id_from_tag(tag_name=new_tag_type)
                 data_manager.add_new_tag(tag_id=tag_id, question_id=question_id)
             else:
                 tags = data_manager.get_tags()
-                return render_template('error_tag.html', tags=tags, question_id=question_id)
+                return render_template('tag_problem.html', tags=tags, question_id=question_id)
         return redirect('/question/' + str(question_id))
     tags = data_manager.get_tags()
-    return render_template('new_tag.html', tags=tags, question_id=question_id)
+    return render_template('tag_new.html', tags=tags, question_id=question_id)
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
@@ -284,10 +288,10 @@ def registration():
         password = request.form['psw']
         if data_manager.get_usernames(user_name) is False:
             message = 'This username already exists. Please, choose another one!'
-            return render_template('wrong_username.html', message = message)
+            return render_template('registration_incorrect.html', message = message)
         elif user_name == '' or password == '':
             message = 'Please, complete all fields!'
-            return render_template('wrong_username.html', message = message)
+            return render_template('registration_incorrect.html', message = message)
         else:
             data_manager.new_registration(user_name=user_name,password=password)
             return redirect('/list')
@@ -323,9 +327,6 @@ def logout():
 @app.route('/users')
 @authenticate
 def users():
-    # if 'username' not in session:
-    #     return redirect('/login')
-    # else:
     users = data_manager.get_users()
     return render_template('users.html', users = users)
 
@@ -333,8 +334,17 @@ def users():
 @app.route('/user/<user_name>')
 @authenticate
 def user_details(user_name):
-    return "user_page of "+user_name
+    user_detail = data_manager.get_user_details(user_name=user_name)
+    user_questions = data_manager.get_user_questions(user_name=user_name)
+    user_answers = data_manager.get_user_answers(user_name=user_name)
+    user_comments = data_manager.get_user_comments(user_name=user_name)
+    return render_template('user_details.html',user_name=user_name, user_details=user_detail,user_questions=user_questions, user_answers=user_answers, user_comments=user_comments)
 
+@app.route('/tags')
+@authenticate
+def display_tags():
+    count_of_tags = data_manager.count_tags()
+    return render_template('tags.html',count_of_tags=count_of_tags)
 
 @app.route('/answer/<answer_id>/accept_answer')
 @authenticate
