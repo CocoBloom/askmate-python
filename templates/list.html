@@ -7,7 +7,12 @@
 </head>
 <body>
 <br>
-<p style="color: white">Click for registration <a style="color: white" href="/registration">Sign up</a> <a style="color: white">or for login <a style="color: white" href="/login">Sign in</a></p>
+<p style="color: white"> {{ login_message }}
+    {%  if login_message == '' %}
+        Click for registration <a style="color: white" href="/registration">Sign up</a> <a style="color: white">or for login <a style="color: white" href="/login">Sign in</a>
+    {% else %}
+        <a style="color: white" href={{ url_for('logout') }}>Logout</a>
+    {% endif %}</p>
     <table >
         <thead>
             {% for question in list_of_questions%}

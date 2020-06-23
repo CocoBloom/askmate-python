@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<form action="/login" method="post" enctype="multipart/form-data">
+    <h1>Login</h1>
+
+    {% block login_fail %}<br>{%  endblock %}<br>
+
+    <label for="username"> E-mail: </label>
+    <input type="text" name="username"  required></inputtext><br><br>
+
+    <label  for="password"> Password: </label>
+    <input type ="password" name="password" required></inputtext><br><br>
+    <button class="button" type="submit">Submit</button><br><br>
+
+    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+</body>
+</html>

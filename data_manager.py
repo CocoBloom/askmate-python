@@ -353,6 +353,7 @@ def create_new_tag(cursor,new_tag):
     else:
         return "None"
 
+
 @connection.connection_handler
 def get_usernames(cursor,user_name):
     query="""SELECT user_name FROM users"""
@@ -385,3 +386,15 @@ def get_users(cursor):
     users = cursor.fetchall()
     print(users)
     return users
+
+
+@connection.connection_handler
+def get_password(cursor, username):
+    query = """
+    SELECT user_password 
+    FROM registration
+    WHERE user_name = %(username)s"""
+    cursor.execute(query, {"username": username})
+    password = cursor.fetchone()['user_password']
+    print (password)
+    return password
