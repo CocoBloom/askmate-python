@@ -251,17 +251,17 @@ def add_new_tag(question_id):
                 data_manager.add_new_tag(tag_id=tag_id, question_id=question_id)
             except:
                 tags = data_manager.get_tags()
-                return render_template('error_tag.html',tags=tags, question_id=question_id)
+                return render_template('tag_problem.html',tags=tags, question_id=question_id)
         else:
             if data_manager.create_new_tag(new_tag=new_tag_type) != "None":
                 tag_id=data_manager.get_id_from_tag(tag_name=new_tag_type)
                 data_manager.add_new_tag(tag_id=tag_id, question_id=question_id)
             else:
                 tags = data_manager.get_tags()
-                return render_template('error_tag.html', tags=tags, question_id=question_id)
+                return render_template('tag_problem.html', tags=tags, question_id=question_id)
         return redirect('/question/' + str(question_id))
     tags = data_manager.get_tags()
-    return render_template('new_tag.html', tags=tags, question_id=question_id)
+    return render_template('tag_new.html', tags=tags, question_id=question_id)
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
@@ -284,10 +284,10 @@ def registration():
         password = request.form['psw']
         if data_manager.get_usernames(user_name) is False:
             message = 'This username already exists. Please, choose another one!'
-            return render_template('wrong_username.html', message = message)
+            return render_template('registration_incorrect.html.html', message = message)
         elif user_name == '' or password == '':
             message = 'Please, complete all fields!'
-            return render_template('wrong_username.html', message = message)
+            return render_template('registration_incorrect.html.html', message = message)
         else:
             data_manager.new_registration(user_name=user_name,password=password)
             return redirect('/list')
@@ -323,9 +323,6 @@ def logout():
 @app.route('/users')
 @authenticate
 def users():
-    # if 'username' not in session:
-    #     return redirect('/login')
-    # else:
     users = data_manager.get_users()
     return render_template('users.html', users = users)
 
@@ -333,7 +330,8 @@ def users():
 @app.route('/user/<user_name>')
 @authenticate
 def user_details(user_name):
-    return "user_page of "+user_name
+    user_detail = data_manager.get_user_details(user_name=user_name)
+    return render_template('user_details.html',user_name=user_name, user_details=user_detail)
 
 
 

@@ -366,6 +366,23 @@ def get_usernames(cursor,user_name):
 
 
 @connection.connection_handler
+def get_users(cursor):
+    query = """SELECT * FROM users"""
+    cursor.execute(query)
+    users = cursor.fetchall()
+    return users
+
+
+@connection.connection_handler
+def get_user_details(cursor,user_name):
+    query = """SELECT * FROM users WHERE user_name = %(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_details = cursor.fetchall()
+    print(user_details)
+    return user_details
+
+
+@connection.connection_handler
 def new_registration(cursor,user_name, password):
     hashed_password = util.hash_password(password=password)
     registration_date = datetime.now().replace(microsecond=0)
@@ -375,15 +392,6 @@ def new_registration(cursor,user_name, password):
                 INSERT INTO registration VALUES (%(reg_id)s, %(username)s, %(hashed_psw)s, %(reg_date)s);
                 """
     cursor.execute(query, {'reg_id':reg_id, 'username':user_name, 'hashed_psw':hashed_password, 'user_id':user_id, 'reg_date':registration_date})
-
-
-@connection.connection_handler
-def get_users(cursor):
-    query = """SELECT * FROM users"""
-    cursor.execute(query)
-    users = cursor.fetchall()
-    print(users)
-    return users
 
 
 @connection.connection_handler
