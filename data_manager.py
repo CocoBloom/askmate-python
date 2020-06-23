@@ -211,17 +211,18 @@ def get_question_id_by_answer_id(cursor: RealDictCursor, answer_id) -> list:
 
 @connection.connection_handler
 def write_to_answers(cursor, dictionary):
-    query = """INSERT INTO answer VALUES (%(id_value)s, %(submission_time_value)s, %(vote_number_value)s, 
+    query = """INSERT INTO answer VALUES (%(id_value)s, %(user_id)s, %(submission_time_value)s, %(vote_number_value)s, 
                     %(question_id_value)s, %(message_value)s, %(image_value)s);"""
-    cursor.execute(query, {'id_value': dictionary['id'], 'submission_time_value': dictionary['submission_time'],
+    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'], 'submission_time_value': dictionary['submission_time'],
                            'vote_number_value': dictionary['vote_number'],
                            'question_id_value': dictionary['question_id'], 'message_value': dictionary['message'],
                            'image_value': dictionary['image']})
 
 
-def create_new_answer(answer, question_id, image):
+def create_new_answer(answer, question_id, image, user_id):
     new_answer = {
         "id": util.get_new_answer_id(),
+        "user_id": user_id,
         "submission_time": datetime.now().replace(microsecond=0),
         "vote_number": 0,
         "question_id": question_id,

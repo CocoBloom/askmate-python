@@ -151,9 +151,10 @@ def edit_comment(comment_id):
 def add_new_answer(question_id):
     if request.method == "POST":
         new_answer = request.form["answer"]
+        user_id = data_manager.get_user_id_by_username(session['username'])
         file = request.files['img']
         image = util.get_image_name(file)
-        data_manager.create_new_answer(new_answer, question_id, image)
+        data_manager.create_new_answer(new_answer, question_id, image, user_id)
         return redirect("/question/" + question_id)
     else:
         return render_template("new_answer.html", question_id=question_id)
