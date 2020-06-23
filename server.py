@@ -346,6 +346,17 @@ def display_tags():
     count_of_tags = data_manager.count_tags()
     return render_template('tags.html',count_of_tags=count_of_tags)
 
+@app.route('/answer/<answer_id>/accept_answer')
+@authenticate
+def accept_answer(answer_id):
+    question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
+    try:
+        user_id = data_manager.get_user_details_by_username(session['username'])['id']
+        data_manager.change_acceptance(answer_id, user_id)
+    finally:
+        return redirect('/question/' + str(question_id))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True,
