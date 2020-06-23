@@ -175,7 +175,8 @@ def add_comment_to_answer(answer_id):
     if request.method == 'POST':
         question_id = (data_manager.get_question_id(answer_id))['question_id']
         answer_comment = request.form['answer_comment']
-        data_manager.create_new_comment(answer_comment, answer_id=answer_id, question_id=question_id)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        data_manager.create_new_comment(answer_comment, user_id, answer_id=answer_id, question_id=question_id)
         return redirect('/question/' + str(question_id))
     return render_template('add_cooment_to_answer.html', answer_id=answer_id)
 
@@ -185,7 +186,8 @@ def add_comment_to_answer(answer_id):
 def add_comment_to_question(question_id):
     if request.method == 'POST':
         question_comment = request.form['question_comment']
-        data_manager.create_question_comment(question_comment, question_id=question_id)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        data_manager.create_question_comment(question_comment, user_id, question_id=question_id)
         return redirect('/question/' + str(question_id))
     else:
         return render_template('comment_to_question.html', question_id=question_id)

@@ -242,18 +242,19 @@ def get_comments(cursor, question_id):
 @connection.connection_handler
 def comment_to_answer(cursor, new_comment):
     query = """INSERT INTO comment VALUES
-               (%(id)s, NULL, %(answer_id)s, %(answer_comment)s, %(submission_time)s );"""
+               (%(id)s, NULL, %(answer_id)s, %(user_id)s, %(answer_comment)s, %(submission_time)s );"""
 
     cursor.execute(query, {'id': new_comment['id'],
-
+                           'user_id': new_comment['user_id'],
                            'answer_id': new_comment['answer_id'],
                            'answer_comment': new_comment['answer_comment'],
                            'submission_time': new_comment['submission_time']})
 
 
-def create_new_comment(answer_comment, answer_id, question_id):
+def create_new_comment(answer_comment, user_id, answer_id, question_id):
     new_comment = {
         'id': util.get_new_comment_id(),
+        'user_id': user_id,
         "submission_time": datetime.now().replace(microsecond=0),
         "answer_comment": answer_comment,
         "answer_id": answer_id
@@ -271,17 +272,18 @@ def delete_comment(cursor, comment_id):
 @connection.connection_handler
 def comment_to_question(cursor, new_comment):
     query = """INSERT INTO comment VALUES
-               (%(id)s, %(question_id)s, NULL, %(question_comment)s, %(submission_time)s );"""
+               (%(id)s, %(user_id)s, %(question_id)s, NULL, %(question_comment)s, %(submission_time)s );"""
 
-    cursor.execute(query, {'id':new_comment['id'],
+    cursor.execute(query, {'id':new_comment['id'], 'user_id': new_comment['user_id'],
                            'question_id': new_comment['question_id'],
                            'question_comment': new_comment['question_comment'],
                            'submission_time': new_comment['submission_time'] })
 
 
-def create_question_comment(question_comment, question_id):
+def create_question_comment(question_comment, user_id, question_id):
     new_comment = {
         'id': util.get_new_comment_id(),
+        'user_id': user_id,
         "submission_time": datetime.now().replace(microsecond=0),
         "question_id": question_id,
         "question_comment": question_comment,
