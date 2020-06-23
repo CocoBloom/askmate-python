@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>User Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
+    <style> table {
+        border-collapse: collapse;
+        border: 2px solid rgb(200, 200, 200);
+        letter-spacing: 1px;
+        font-family: sans-serif;
+        font-size: .8rem;}
+
+        td,th {border: 1px solid rgb(190, 190, 190);
+        padding: 5px 10px;}
+
+        td {text-align: center;}
+
+        .vanish { border-color: #e4f0f5;)}
+        </style>
+</head>
+<body>
+
+    <label style="color:white;">User Details of {{  user_name }}:</label><br><br>
+    <table >
+    {% for detail in user_details %}
+
+        <tr><td> ID</td><td>{{ detail.id }}</td></tr>
+        <tr><td>User Name</td><td>{{ detail.user_name }}</td></tr>
+        <tr><td>Count of Questions</td><td>{{ detail.count_of_questions }}</td></tr>
+        <tr><td>Count of Answers</td><td>{{ detail.count_of_answers }}</td></tr>
+        <tr><td>Count of Comments</td><td>{{ detail.count_of_comments }}</td></tr>
+        <tr><td>Reputation</td><td>{{ detail.reputation }}</td></tr>
+    {%  endfor %}
+    </table>
+
+    <label></label>
+</body>
+</html>
