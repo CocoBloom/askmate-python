@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, session, url_for, escape
+from functools import wraps
 import data_manager
 from datetime import datetime
 import time
@@ -9,6 +10,16 @@ import util
 app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
+def authenticate(func):
+    @wraps(func)
+    def wrapper(*args,**kwargs):
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        return func(*args,**kwargs)
+    return wrapper
+
 
 
 @app.route("/")
@@ -46,7 +57,9 @@ def question_page(question_id):
                            comments=comments, tags=tags)
 
 
+
 @app.route('/add-question', methods=["GET", "POST"])
+@authenticate
 def add_question():
     if request.method == "POST":
         dictionary_of_questions = data_manager.create_new_question()
@@ -60,14 +73,18 @@ def add_question():
         return render_template('ask_questions.html')
 
 
+
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
+@authenticate
 def delete_question(question_id):
     if request.method == 'POST':
         data_manager.delete_question(question_id)
     return redirect('/list')
 
 
+
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
+@authenticate
 def edit_question(question_id):
     question_details = data_manager.get_display_question(question_id)
     if request.method == 'GET':
@@ -87,7 +104,9 @@ def edit_question(question_id):
     return redirect('/question/' + question_id)
 
 
+
 @app.route('/answer/<answer_id>/edit', methods=["GET", "POST"])
+@authenticate
 def edit_answer(answer_id):
     answer_details = data_manager.get_display_answers('id', answer_id)
     if request.method == 'GET':
@@ -107,7 +126,9 @@ def edit_answer(answer_id):
         return redirect('/question/' + question_id)
 
 
+
 @app.route('/comment/<comment_id>/edit', methods=["GET", "POST"])
+@authenticate
 def edit_comment(comment_id):
     comment_details = data_manager.get_display_comment(comment_id)
     if request.method == 'GET':
@@ -123,7 +144,9 @@ def edit_comment(comment_id):
         return redirect('/question/' + str(question_id))
 
 
+
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
+@authenticate
 def add_new_answer(question_id):
     if request.method == "POST":
         new_answer = request.form["answer"]
@@ -135,7 +158,9 @@ def add_new_answer(question_id):
         return render_template("new_answer.html", question_id=question_id)
 
 
+
 @app.route('/answer/<answer_id>/delete')
+@authenticate
 def delete_answer(answer_id):
     question_id = data_manager.get_question_id(answer_id)['question_id']
     data_manager.delete_answer_by_id(answer_id)
@@ -143,6 +168,7 @@ def delete_answer(answer_id):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
+@authenticate
 def add_comment_to_answer(answer_id):
     if request.method == 'POST':
         question_id = (data_manager.get_question_id(answer_id))['question_id']
@@ -153,6 +179,7 @@ def add_comment_to_answer(answer_id):
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+@authenticate
 def add_comment_to_question(question_id):
     if request.method == 'POST':
         question_comment = request.form['question_comment']
@@ -163,6 +190,7 @@ def add_comment_to_question(question_id):
 
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
+@authenticate
 def delete_comment(comment_id):
     answer_id = data_manager.get_id_from_comment(comment_id=comment_id)['answer_id']
     try:
@@ -174,18 +202,21 @@ def delete_comment(comment_id):
 
 
 @app.route('/question/<question_id>/vote_up')
+@authenticate
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
     return redirect('/list')
 
 
 @app.route('/question/<question_id>/vote_down')
+@authenticate
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
     return redirect('/list')
 
 
 @app.route('/answer/<answer_id>/vote_up')
+@authenticate
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
@@ -193,6 +224,7 @@ def vote_up_answer(answer_id):
 
 
 @app.route('/answer/<answer_id>/vote_down')
+@authenticate
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
@@ -208,6 +240,7 @@ def search_for_questions():
 
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+@authenticate
 def add_new_tag(question_id):
     if request.method == 'POST':
         tag_name = request.form['tag_name']
@@ -232,6 +265,7 @@ def add_new_tag(question_id):
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
+@authenticate
 def delete_tag(question_id, tag_id):
     data_manager.delete_tags(question_id=question_id,tag_id=tag_id)
     return redirect('/question/' + str(question_id))
@@ -241,8 +275,6 @@ def delete_tag(question_id, tag_id):
 def increase_view_number(question_id):
     data_manager.update_view_number(question_id)
     return redirect('/question/' + str(question_id))
-
-
 
 
 @app.route('/registration', methods=["GET", "POST"])
@@ -274,10 +306,10 @@ def login():
                 session['username'] = request.form['username']
                 return redirect(url_for('display_list'))
             else:
-                message = "Wrong password!"
+                message = "Wrong e-mail or password!"
                 return render_template('login_fail.html', message=message)
         else:
-            message = "Not registered!"
+            message = "Wrong e-mail or password!"
             return render_template('login_fail.html', message=message)
     return render_template('login.html')
 
@@ -289,6 +321,7 @@ def logout():
 
 
 @app.route('/users')
+@authenticate
 def users():
     # if 'username' not in session:
     #     return redirect('/login')
@@ -298,6 +331,7 @@ def users():
 
 
 @app.route('/user/<user_name>')
+@authenticate
 def user_details(user_name):
     return "user_page of "+user_name
 

@@ -359,8 +359,6 @@ def get_usernames(cursor,user_name):
     query="""SELECT user_name FROM users"""
     cursor.execute(query)
     user_names= cursor.fetchall()
-    print("usernevek",user_names)
-    print(user_name)
     for user in user_names:
         if user['user_name'] == user_name:
             return False
