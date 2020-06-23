@@ -426,6 +426,17 @@ def get_user_answers(cursor,user_name):
     return user_answers
 
 @connection.connection_handler
+def get_user_comments(cursor,user_name):
+    query = """SELECT question_id, message FROM comment
+                    LEFT JOIN users
+                    ON user_id = users.id  
+                WHERE users.user_name =%(user_name)s"""
+    cursor.execute(query, {'user_name':user_name})
+    user_comments = cursor.fetchall()
+    print("user_answers",user_comments)
+    return user_comments
+
+@connection.connection_handler
 def get_user_id_by_username(cursor, username):
     query = '''
         SELECT id FROM users
@@ -434,3 +445,16 @@ def get_user_id_by_username(cursor, username):
     cursor.execute(query, {'username': username})
     user_id = cursor.fetchone()['id']
     return user_id
+
+@connection.connection_handler
+def count_tags(cursor):
+    query="""
+    SELECT tag.name, COUNT(question_id) FROM question_tag
+        LEFT JOIN tag
+            ON question_tag.tag_id = tag.id
+    WHERE question_tag.tag_id = tag.id
+    GROUP BY tag.name;"""
+    cursor.execute(query)
+    count_of_tags = cursor.fetchall()
+    print("count_of_tags",count_of_tags)
+    return count_of_tags
