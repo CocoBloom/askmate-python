@@ -69,6 +69,7 @@ def add_question():
         dictionary_of_questions.update(
             {'user_id': user_id, 'title': request.form.get('questiontitle'), 'message': request.form.get('questionbody'), 'image': image})
         data_manager.write_to_questions(dictionary_of_questions)
+        data_manager.more_user_details(user_id=user_id)
         return redirect('/list')
     else:
         return render_template('ask_questions.html')
@@ -155,6 +156,7 @@ def add_new_answer(question_id):
         file = request.files['img']
         image = util.get_image_name(file)
         data_manager.create_new_answer(new_answer, question_id, image, user_id)
+        data_manager.more_user_details(user_id=user_id)
         return redirect("/question/" + question_id)
     else:
         return render_template("new_answer.html", question_id=question_id)
@@ -177,6 +179,7 @@ def add_comment_to_answer(answer_id):
         answer_comment = request.form['answer_comment']
         user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.create_new_comment(answer_comment, user_id, answer_id=answer_id, question_id=question_id)
+        data_manager.more_user_details(user_id=user_id)
         return redirect('/question/' + str(question_id))
     return render_template('add_cooment_to_answer.html', answer_id=answer_id)
 
@@ -334,6 +337,8 @@ def users():
 @app.route('/user/<user_name>')
 @authenticate
 def user_details(user_name):
+    user_id = data_manager.get_user_id_by_username(username=user_name)
+    data_manager.more_user_details(user_id=user_id)
     user_detail = data_manager.get_user_details(user_name=user_name)
     user_questions = data_manager.get_user_questions(user_name=user_name)
     user_answers = data_manager.get_user_answers(user_name=user_name)

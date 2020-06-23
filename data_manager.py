@@ -16,7 +16,7 @@ def get_main_list(cursor, count):
 
 @connection.connection_handler
 def get_question_id(cursor: RealDictCursor, answer_id):
-    print("anser:id",answer_id)
+    print("anser:id", answer_id)
     query = """
         SELECT *
         FROM answer
@@ -63,7 +63,8 @@ def get_display_list(cursor, mode='submission_time', direction='DESC') -> object
 def write_to_questions(cursor, dictionary):
     query = """INSERT INTO question VALUES (%(id_value)s, %(user_id)s, %(submission_time_value)s, %(view_number_value)s, 
                         %(vote_number_value)s, %(title_value)s, %(message_value)s, %(image_value)s);"""
-    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'], 'submission_time_value': dictionary['submission_time'],
+    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'],
+                           'submission_time_value': dictionary['submission_time'],
                            'view_number_value': dictionary['view_number'],
                            'vote_number_value': dictionary['vote_number'], 'title_value': dictionary['title'],
                            'message_value': dictionary['message'], 'image_value': dictionary['image']})
@@ -216,7 +217,8 @@ def get_question_id_by_answer_id(cursor: RealDictCursor, answer_id) -> list:
 def write_to_answers(cursor, dictionary):
     query = """INSERT INTO answer VALUES (%(id_value)s, %(user_id)s, %(submission_time_value)s, %(vote_number_value)s, 
                     %(question_id_value)s, %(message_value)s, %(image_value)s);"""
-    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'], 'submission_time_value': dictionary['submission_time'],
+    cursor.execute(query, {'id_value': dictionary['id'], 'user_id': dictionary['user_id'],
+                           'submission_time_value': dictionary['submission_time'],
                            'vote_number_value': dictionary['vote_number'],
                            'question_id_value': dictionary['question_id'], 'message_value': dictionary['message'],
                            'image_value': dictionary['image']})
@@ -278,10 +280,10 @@ def comment_to_question(cursor, new_comment):
     query = """INSERT INTO comment VALUES
                (%(id)s, %(user_id)s, %(question_id)s, NULL, %(question_comment)s, %(submission_time)s );"""
 
-    cursor.execute(query, {'id':new_comment['id'], 'user_id': new_comment['user_id'],
+    cursor.execute(query, {'id': new_comment['id'], 'user_id': new_comment['user_id'],
                            'question_id': new_comment['question_id'],
                            'question_comment': new_comment['question_comment'],
-                           'submission_time': new_comment['submission_time'] })
+                           'submission_time': new_comment['submission_time']})
 
 
 def create_question_comment(question_comment, user_id, question_id):
@@ -295,33 +297,34 @@ def create_question_comment(question_comment, user_id, question_id):
     comment_to_question(new_comment)
     print(new_comment)
 
+
 @connection.connection_handler
 def get_tags(cursor):
     query = """SELECT name FROM tag"""
     cursor.execute(query)
-    row=cursor.fetchall()
-    print("ezek a tagaim2,",row)
+    row = cursor.fetchall()
+    print("ezek a tagaim2,", row)
     return row
 
 
 @connection.connection_handler
-def get_id_from_tag(cursor,tag_name):
-    query="""SELECT id FROM tag
+def get_id_from_tag(cursor, tag_name):
+    query = """SELECT id FROM tag
             WHERE name=%(tag_name)s"""
-    cursor.execute(query,{'tag_name':tag_name})
-    row  =cursor.fetchone()
+    cursor.execute(query, {'tag_name': tag_name})
+    row = cursor.fetchone()
     return row['id']
 
 
 @connection.connection_handler
-def add_new_tag(cursor,question_id,tag_id):
-    query="""INSERT INTO question_tag VALUES (%(question_id)s, %(tag_id)s)"""
-    cursor.execute(query,{'question_id':question_id,'tag_id':tag_id})
+def add_new_tag(cursor, question_id, tag_id):
+    query = """INSERT INTO question_tag VALUES (%(question_id)s, %(tag_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'tag_id': tag_id})
 
 
 @connection.connection_handler
 def get_tags_of_question(cursor):
-    query="""SELECT * FROM tag JOIN question_tag ON tag.id=question_tag.tag_id"""
+    query = """SELECT * FROM tag JOIN question_tag ON tag.id=question_tag.tag_id"""
     cursor.execute(query)
     all = cursor.fetchall()
     return all
@@ -341,31 +344,31 @@ def search_for_question(cursor, search_text):
 
 
 @connection.connection_handler
-def delete_tags(cursor,question_id,tag_id,):
-    query="""DELETE FROM question_tag WHERE tag_id=%(tag_id)s and question_id=%(question_id)s"""
-    cursor.execute(query,{'tag_id':tag_id, 'question_id':question_id})
+def delete_tags(cursor, question_id, tag_id, ):
+    query = """DELETE FROM question_tag WHERE tag_id=%(tag_id)s and question_id=%(question_id)s"""
+    cursor.execute(query, {'tag_id': tag_id, 'question_id': question_id})
 
 
 @connection.connection_handler
-def create_new_tag(cursor,new_tag):
-    tags=get_tags()
-    tag_names=[]
+def create_new_tag(cursor, new_tag):
+    tags = get_tags()
+    tag_names = []
     for tag in tags:
         tag_names.append(tag['name'])
     if new_tag not in tag_names:
-        id=util.get_new_tag_id()
-        query= """INSERT INTO tag VALUES ( %(id)s, %(name)s )"""
-        cursor.execute(query, {'id':id,'name':new_tag})
+        id = util.get_new_tag_id()
+        query = """INSERT INTO tag VALUES ( %(id)s, %(name)s )"""
+        cursor.execute(query, {'id': id, 'name': new_tag})
         return "true"
     else:
         return "None"
 
 
 @connection.connection_handler
-def get_usernames(cursor,user_name):
-    query="""SELECT user_name FROM users"""
+def get_usernames(cursor, user_name):
+    query = """SELECT user_name FROM users"""
     cursor.execute(query)
-    user_names= cursor.fetchall()
+    user_names = cursor.fetchall()
     for user in user_names:
         if user['user_name'] == user_name:
             return False
@@ -381,16 +384,16 @@ def get_users(cursor):
 
 
 @connection.connection_handler
-def get_user_details(cursor,user_name):
+def get_user_details(cursor, user_name):
     query = """SELECT * FROM users WHERE user_name = %(user_name)s"""
-    cursor.execute(query, {'user_name':user_name})
+    cursor.execute(query, {'user_name': user_name})
     user_details = cursor.fetchall()
     print(user_details)
     return user_details
 
 
 @connection.connection_handler
-def new_registration(cursor,user_name, password):
+def new_registration(cursor, user_name, password):
     hashed_password = util.hash_password(password=password)
     registration_date = datetime.now().replace(microsecond=0)
     reg_id = util.get_new_registration_id()
@@ -398,7 +401,8 @@ def new_registration(cursor,user_name, password):
     query = """INSERT INTO users VALUES (%(user_id)s, %(username)s, 0, 0, 0, 0);
                 INSERT INTO registration VALUES (%(reg_id)s, %(username)s, %(hashed_psw)s, %(reg_date)s);
                 """
-    cursor.execute(query, {'reg_id':reg_id, 'username':user_name, 'hashed_psw':hashed_password, 'user_id':user_id, 'reg_date':registration_date})
+    cursor.execute(query, {'reg_id': reg_id, 'username': user_name, 'hashed_psw': hashed_password, 'user_id': user_id,
+                           'reg_date': registration_date})
 
 
 @connection.connection_handler
@@ -409,12 +413,12 @@ def get_password(cursor, username):
     WHERE user_name = %(username)s"""
     cursor.execute(query, {"username": username})
     password = cursor.fetchone()['user_password']
-    print (password)
+    print(password)
     return password
 
 
 @connection.connection_handler
-def get_user_details_by_username(cursor,username):
+def get_user_details_by_username(cursor, username):
     query = """
        SELECT * 
        FROM users
@@ -425,8 +429,8 @@ def get_user_details_by_username(cursor,username):
 
 
 @connection.connection_handler
-def change_acceptance(cursor,answer_id, user_id):
-    query="""
+def change_acceptance(cursor, answer_id, user_id):
+    query = """
     UPDATE answer
     SET if_accepted =
     CASE 
@@ -438,25 +442,49 @@ def change_acceptance(cursor,answer_id, user_id):
     cursor.execute(query, {"answer_id": answer_id, "user_id": user_id})
 
 
-
 @connection.connection_handler
-def get_user_questions(cursor,user_name):
+def get_user_questions(cursor, user_name):
     query = """SELECT question.id, question.title FROM question LEFT JOIN users ON user_id = users.id WHERE users.user_name =%(user_name)s"""
-    cursor.execute(query, {'user_name':user_name})
+    cursor.execute(query, {'user_name': user_name})
     user_questions = cursor.fetchall()
-    print("user_questions",user_questions)
+    print("user_questions", user_questions)
+    print("kerdesek hossza", len(user_questions))
     return user_questions
 
-@connection.connection_handler
-def get_user_answers(cursor,user_name):
-    query = """SELECT question_id, message FROM answer LEFT JOIN users ON user_id = users.id  WHERE users.user_name =%(user_name)s"""
-    cursor.execute(query, {'user_name':user_name})
-    user_answers = cursor.fetchall()
-    print("user_answers",user_answers)
-    return user_answers
 
 @connection.connection_handler
-def get_user_comments(cursor,user_name):
+def get_user_name(cursor, user_id):
+    query = """SELECT user_name FROM users WHERE id=%(user_id)s"""
+    cursor.execute(query, {'user_id': user_id})
+    user_name = cursor.fetchone()['user_name']
+    print(user_name)
+    return user_name
+
+
+@connection.connection_handler
+def more_user_details(cursor, user_id):
+    user_name = get_user_name(user_id=user_id)
+    count_of_questions = len(get_user_questions(user_name=user_name))
+    count_of_answers = len(get_user_answers(user_name=user_name))
+    count_of_comments = len(get_user_comments(user_name=user_name))
+    query = """UPDATE users 
+    SET count_of_questions = %(c_of_q)s, count_of_answers = %(c_of_a)s, count_of_comments = %(c_of_c)s
+    WHERE id = %(user_id)s"""
+    cursor.execute(query, {'c_of_q': count_of_questions, 'c_of_a': count_of_answers, 'c_of_c': count_of_comments,
+                           'user_id': user_id})
+
+
+@connection.connection_handler
+def get_user_answers(cursor, user_name):
+    query = """SELECT question_id, message FROM answer LEFT JOIN users ON user_id = users.id  WHERE users.user_name =%(user_name)s"""
+    cursor.execute(query, {'user_name': user_name})
+    user_answers = cursor.fetchall()
+    print("user_answers", user_answers)
+    return user_answers
+
+
+@connection.connection_handler
+def get_user_comments(cursor, user_name):
     query = """SELECT comment.message,
        CASE
            WHEN comment.question_id IS NULL THEN answer.question_id
@@ -468,10 +496,11 @@ def get_user_comments(cursor,user_name):
     LEFT JOIN answer
     ON comment.answer_id = answer.id
     WHERE users.user_name = %(user_name)s;"""
-    cursor.execute(query, {'user_name':user_name})
+    cursor.execute(query, {'user_name': user_name})
     user_comments = cursor.fetchall()
-    print("user_answers",user_comments)
+    print("user_answers", user_comments)
     return user_comments
+
 
 @connection.connection_handler
 def get_user_id_by_username(cursor, username):
@@ -483,9 +512,10 @@ def get_user_id_by_username(cursor, username):
     user_id = cursor.fetchone()['id']
     return user_id
 
+
 @connection.connection_handler
 def count_tags(cursor):
-    query="""
+    query = """
     SELECT tag.name, COUNT(question_id) FROM question_tag
         LEFT JOIN tag
             ON question_tag.tag_id = tag.id
