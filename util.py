@@ -45,7 +45,6 @@ def get_new_user_id(cursor):
     query = """SELECT MAX(id) FROM users;"""
     cursor.execute(query)
     new_id = cursor.fetchall()[0]['max'] + 1
-    print("new_id:", new_id)
     return new_id
 
 @connection.connection_handler
@@ -53,7 +52,6 @@ def get_new_registration_id(cursor):
     query = """SELECT MAX(id) FROM registration;"""
     cursor.execute(query)
     new_id = cursor.fetchall()[0]['max'] + 1
-    print("new_id:",new_id)
     return new_id
 
 

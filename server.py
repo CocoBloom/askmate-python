@@ -21,7 +21,6 @@ def authenticate(func):
     return wrapper
 
 
-
 @app.route("/")
 def display_main_list():
     if 'username' in session:
@@ -41,6 +40,8 @@ def display_list():
     mode = request.args.get('order_by')
     direction = request.args.get('order_direction')
     if mode:
+        #default_mode = "submission_type"
+        #default_direction = "ASC"
         list_of_questions = data_manager.get_display_list(mode=mode, direction=direction)
     else:
         list_of_questions = data_manager.get_display_list()
@@ -55,7 +56,6 @@ def question_page(question_id):
     tags = data_manager.get_tags_of_question()
     return render_template("question.html", question_id=question_id, question=question_details, answers=answers,
                            comments=comments, tags=tags)
-
 
 
 @app.route('/add-question', methods=["GET", "POST"])
@@ -167,7 +167,6 @@ def add_new_answer(question_id):
 def delete_answer(answer_id):
     question_id = data_manager.get_question_id(answer_id)['question_id']
     image = data_manager.get_display_answers('question_id',question_id)[0]['image']
-    print(image)
     if os.path.exists(image):
         os.remove(image)
     data_manager.delete_answer_by_id(answer_id)
@@ -303,9 +302,9 @@ def registration():
         if data_manager.get_usernames(user_name) is False:
             message = 'This username already exists. Please, choose another one!'
             return render_template('registration_incorrect.html', message = message)
-        elif user_name == '' or password == '':
-            message = 'Please, complete all fields!'
-            return render_template('registration_incorrect.html', message = message)
+        # elif user_name == '' or password == '':
+        #     message = 'Please, complete all fields!'
+        #     return render_template('registration_incorrect.html', message = message)
         else:
             data_manager.new_registration(user_name=user_name,password=password)
             return redirect('/list')

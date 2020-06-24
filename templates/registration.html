@@ -5,10 +5,11 @@
     <title>Registration</title>
     <style>
         body {
-        background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
-        background-repeat: repeat;
+        background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
+        background-repeat: no-repeat;
         background-attachment: fixed;
-        background-position: center;}
+        background-position: center;
+         background-size: cover;}
         thead,tfoot {background-color: #3f87a6;  color: #fff}
         tbody {background-color: #e4f0f5;}
         caption {padding: 50px; caption-side: top; text-align: center; font-size:30px}
@@ -55,15 +56,15 @@
     {% block used_name %}{%  endblock %}
     <hr>
     <label for="email"><b>Email</b></label>
-    <input type="email" placeholder="Enter Email" name="email" id="email" ><br><br>
+    <input type="email" placeholder="Enter Email" name="email" id="email" required><br><br>
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" id="psw" ><br>
+    <input type="password" placeholder="Enter Password" name="psw" id="psw" required><br>
 
     <hr>
 
 
-    <button type="submit" class="registerbtn">Register</button>
+    <button type="submit" class="button">Register</button>
   </div>
 
   <div class="container signin">

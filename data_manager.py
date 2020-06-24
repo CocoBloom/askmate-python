@@ -56,7 +56,7 @@ def get_display_list(cursor, mode='submission_time', direction='DESC') -> object
     FROM question
     JOIN users
     ON user_id=users.id
-    ORDER BY {mode} {direction}"""
+    ORDER BY {mode} {direction}""".format()
     cursor.execute(query)
     list_of_questions = cursor.fetchall()
     return list_of_questions
@@ -538,6 +538,7 @@ def update_reputation(cursor, user_id, num):
     cursor.execute (f'''UPDATE users
                 SET reputation= reputation + {num}
                 WHERE id = {user_id};''')
+
 
 @connection.connection_handler
 def count_tags(cursor):
