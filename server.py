@@ -166,6 +166,10 @@ def add_new_answer(question_id):
 @authenticate
 def delete_answer(answer_id):
     question_id = data_manager.get_question_id(answer_id)['question_id']
+    image = data_manager.get_display_answers('question_id',question_id)[0]['image']
+    print(image)
+    if os.path.exists(image):
+        os.remove(image)
     data_manager.delete_answer_by_id(answer_id)
     return redirect('/question/' + str(question_id))
 
