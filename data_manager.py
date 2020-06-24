@@ -432,6 +432,20 @@ def get_user_details_by_username(cursor, username):
 
 
 @connection.connection_handler
+def update_reputation_by_acceptance(cursor, answer_id):
+    query = """
+    UPDATE users
+    SET reputation =
+    CASE WHEN if_accepted = true THEN reputation - 15
+    ELSE reputation + 15
+    END
+    FROM answer a
+    WHERE users.id = a.user_id AND a.id = %(answer_id)s 
+    """
+    cursor.execute(query, {"answer_id": answer_id})
+
+
+@connection.connection_handler
 def change_acceptance(cursor, answer_id):
     query = """
     UPDATE answer
@@ -443,6 +457,9 @@ def change_acceptance(cursor, answer_id):
     WHERE id = %(answer_id)s 
     """
     cursor.execute(query, {"answer_id": answer_id})
+
+
+
 
 
 @connection.connection_handler
