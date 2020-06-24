@@ -365,6 +365,7 @@ def accept_answer(answer_id):
     user_questions = data_manager.get_user_questions(session['username'])
     question_ids = [q['id'] for q in user_questions]
     if question_id in question_ids:
+        data_manager.update_reputation_by_acceptance(answer_id)
         data_manager.change_acceptance(answer_id)
     return redirect('/question/' + str(question_id))
 
