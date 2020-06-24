@@ -518,15 +518,13 @@ def get_user_id_by_username(cursor, username):
 
 @connection.connection_handler
 def update_reputation(cursor, user_id, num):
-    query = '''UPDATE users
-                SET reputation= reputation + %(num)s
-                WHERE id = %(user_id)s;'''
-    cursor.execute = (query, {'user_id': user_id, 'num': num})
-
+    cursor.execute (f'''UPDATE users
+                SET reputation= reputation + {num}
+                WHERE id = {user_id};''')
 
 @connection.connection_handler
 def count_tags(cursor):
-query = """
+    query = """
     SELECT tag.name, COUNT(question_id) FROM question_tag
         LEFT JOIN tag
             ON question_tag.tag_id = tag.id

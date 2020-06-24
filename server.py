@@ -212,6 +212,8 @@ def delete_comment(comment_id):
 @authenticate
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
+    user_id = data_manager.get_display_question(question_id)['user_id']
+    data_manager.update_reputation(user_id, num=5)
     return redirect('/list')
 
 
@@ -219,6 +221,8 @@ def vote_up_question(question_id):
 @authenticate
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
+    user_id = data_manager.get_display_question(question_id)['user_id']
+    data_manager.update_reputation(user_id, num=-2)
     return redirect('/list')
 
 
@@ -227,6 +231,8 @@ def vote_down_question(question_id):
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
+    user_id = data_manager.get_display_question(question_id)['user_id']
+    data_manager.update_reputation(user_id, num=10)
     return redirect('/question/' + str(question_id))
 
 
@@ -235,6 +241,8 @@ def vote_up_answer(answer_id):
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
+    user_id = data_manager.get_display_question(question_id)['user_id']
+    data_manager.update_reputation(user_id, num=-2)
     return redirect('/question/' + str(question_id))
 
 
