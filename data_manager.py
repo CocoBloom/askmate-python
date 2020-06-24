@@ -432,7 +432,7 @@ def get_user_details_by_username(cursor, username):
 
 
 @connection.connection_handler
-def change_acceptance(cursor, answer_id, user_id):
+def change_acceptance(cursor, answer_id):
     query = """
     UPDATE answer
     SET if_accepted =
@@ -440,9 +440,9 @@ def change_acceptance(cursor, answer_id, user_id):
     WHEN if_accepted = true THEN false
     ELSE true
     END
-    WHERE id = %(answer_id)s AND user_id = %(user_id)s
+    WHERE id = %(answer_id)s 
     """
-    cursor.execute(query, {"answer_id": answer_id, "user_id": user_id})
+    cursor.execute(query, {"answer_id": answer_id})
 
 
 @connection.connection_handler

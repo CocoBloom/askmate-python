@@ -355,11 +355,11 @@ def display_tags():
 @authenticate
 def accept_answer(answer_id):
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
-    try:
-        user_id = data_manager.get_user_details_by_username(session['username'])['id']
-        data_manager.change_acceptance(answer_id, user_id)
-    finally:
-        return redirect('/question/' + str(question_id))
+    user_questions = data_manager.get_user_questions(session['username'])
+    question_ids = [q['id'] for q in user_questions]
+    if question_id in question_ids:
+        data_manager.change_acceptance(answer_id)
+    return redirect('/question/' + str(question_id))
 
 
 
