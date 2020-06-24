@@ -6,7 +6,10 @@ import util
 
 @connection.connection_handler
 def get_main_list(cursor, count):
-    cursor.execute("""SELECT * FROM question
+    cursor.execute("""SELECT question.id,users.user_name,submission_time,view_number,vote_number,title,message,image
+    FROM question
+    JOIN users
+    ON user_id=users.id
                       ORDER BY submission_time DESC
                       LIMIT %(count)s;""",
                    {'count': count})
