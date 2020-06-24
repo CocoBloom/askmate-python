@@ -74,16 +74,15 @@ def add_question():
     else:
         return render_template('ask_questions.html')
 
-
-
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
 @authenticate
 def delete_question(question_id):
     if request.method == 'POST':
+        image = data_manager.get_display_question(question_id)['image']
+        if os.path.exists(image):
+            os.remove(image)
         data_manager.delete_question(question_id)
     return redirect('/list')
-
-
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 @authenticate
