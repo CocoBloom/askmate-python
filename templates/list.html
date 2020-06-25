@@ -102,7 +102,11 @@
             <li><a href="/list"><i class="fa fa-clone"></i>  All questions</a></li>
             <li><a href="add-question"><i class="fa fa-edit"></i>  Add question</a></li>
             <li><a href="/users"><i class="fa fa-users"></i>  List of Users</a></li>
-            <li><a href="/registration"><i class="fa fa-user"></i>  Registration</a></li>
+            <li> {% if 'username' in session %}
+                <a href="/logout"><i class="fa fa-user"></i> Log out</a>
+                {% else %}
+                <a href="/login"><i class="fa fa-user"></i>  Sign in</a></li>
+                {% endif %}
         </ul>
     </div>
     <form action="/search" method="GET">
