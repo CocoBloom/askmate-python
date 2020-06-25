@@ -8,12 +8,20 @@
         *{
             font-family: Chilanka;
         }
+                        div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
     </style>
 </head>
 
 <body>
+<div>
 <form action="/login" method="post" enctype="multipart/form-data">
-    <div class="login-box">
+    <form class="login-box">
     <h1>Login</h1>
 
     {% block login_fail %}<br>{%  endblock %}<br>
@@ -29,6 +37,7 @@
     <input type ="password" id="password" name="password" placeholder="Enter Password" required></inputtext></div><br><br>
     <text> If you are not registered:</text> <a href={{ url_for("registration") }}>Sign up here</a><br><br>
     <button class="btn" type="submit">Sign In</button><br><br>
+    </form>
 
 
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>

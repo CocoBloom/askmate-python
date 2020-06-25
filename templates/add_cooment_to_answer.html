@@ -17,15 +17,25 @@
         position: absolute;
         top: 25%;
         left: 30%;}</style>
+        left: 30%;}
+
+                div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
 </head>
 <body>
-    <form action="/answer/{{ answer_id }}/new-comment" method="post">
+    <div><form action="/answer/{{ answer_id }}/new-comment" method="post">
         <label>Write a comment</label><br>
         <textarea name="answer_comment" rows="10" cols="50" placeholder="Place your comment here" required></textarea><br>
         <button class="button" type="submit">Submit</button>
         <button class="button" type="reset">Reset</button>
-        <br><br>
+        <br><br></form>
         <a href="/question/{{ answer_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
-    </form>
+    </div>
 </body>
 </html>

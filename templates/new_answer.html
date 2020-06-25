@@ -15,11 +15,19 @@
          background-size: cover;
         position: absolute;
         top: 25%;
-        left: 30%;}}</style>
+        left: 30%;}
+                                div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+        </style>
         <title> Add new answer | Ask mate</title>
     </head>
     <body>
-        <h1>Add new answer</h1>
+        <div><h1>Add new answer</h1>
         <form action="/question/{{ question_id }}/new-answer" method="post" enctype="multipart/form-data">
             <label style="color:white" for="new_answer"> Your answer: </label><br>
             <textarea id="new_answer" name="answer" rows="4" cols="60" required></textarea><br><br>
@@ -29,5 +37,6 @@
             <br><br><br>
         </form>
         <a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+        </div>
     </body>
 </html>

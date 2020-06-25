@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Tags</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='question_style2.css') }}">
     <style>
         *{
             font-family: Chilanka;
@@ -29,10 +29,19 @@
          background-size: cover;
         position: absolute;
         top: 25%;
-        left: 30%;}}</style>
+        left: 30%;}
+                            div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
 
 </head>
 <body>
+<div>
 <caption>Tags</caption>
 <table>
     {% for tag in count_of_tags %}
@@ -41,6 +50,7 @@
     {% endfor %}
 </table>
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+</div>
 
 </body>
 </html>

@@ -16,10 +16,19 @@
         position: absolute;
         top: 25%;
        left: 30%;}}</style>
+        left: 37%;}
+                div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
     <title>Edit question</title>
 </head>
 <body>
-<form action="/question/{{ question.id }}/edit" method="post" enctype="multipart/form-data">
+<div><form action="/question/{{ question.id }}/edit" method="post" enctype="multipart/form-data">
     <h1>Edit your question</h1>
     <textarea name="edittitle" rows="3" cols="30">{{question.title}}</textarea><br>
     <textarea name="editbody" rows="10" cols="50" >{{question.message}}</textarea>
@@ -28,6 +37,7 @@
     <button class="button" type="reset">Reset</button>
     <input class="button" type=file name="editimage">
     <br><br>
+</form></div>
     <a href="/question/{{ question.id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
 </body>
 </html>

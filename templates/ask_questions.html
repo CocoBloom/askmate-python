@@ -18,18 +18,29 @@
          background-size: cover;
         position: absolute;
         top: 25%;
-        left: 30%;}}</style>
+        left: 30%;}
+
+        div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
 </head>
 <body>
-<form action="" method="post" enctype="multipart/form-data">
+
+<div><form action="" method="post" enctype="multipart/form-data">
     {% block header %}<h1>Ask a question</h1>{% endblock %}
     {%block title_of_question%}<input type="text" name="questiontitle" placeholder="Question title" required><br>{%endblock%}
-    <textarea name="questionbody" rows="10" cols="50" placeholder="Place your question here" required>{% block questionbody %}{% endblock %}</textarea>
+    <textarea  name="questionbody" rows="10" cols="50" placeholder="Place your question here"  required>{% block questionbody %}{% endblock %}</textarea>
     <br>
     <button class="button" type="submit">Submit</button>
     <button class="button" type="reset">Reset</button>
     <input class="button" type=file name="questionimage">
 </form>
+</div>
     <br><br>
     {% block link %}
     <a href="/"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>

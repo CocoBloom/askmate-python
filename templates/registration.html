@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <title>Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='login2.css') }}">
-    <stlye>
+    <style>
         *{
             font-family: Chilanka;
         }
-    </stlye>
+
+                                div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
 </head>
 <body>
     <form action="/registration" method="POST">
@@ -40,27 +48,3 @@
 </body>
 </html>
 
-<!--
-<body>
-<form action="/login" method="post" enctype="multipart/form-data">
-    <div class="login-box">
-    <h1>Login</h1>
-
-    {% block login_fail %}<br>{%  endblock %}<br>
-
-    <div class="textbox">
-    <i class="fas fa-user"></i>
-    <label for="username"> E-mail: </label>
-    <input type="email" id="username" name="username"  required></inputtext><br><br></div>
-
-    <div class="textbox">
-    <i class="fas fa-lock"></i>
-    <label  for="password"> Password: </label>
-    <input type ="password" id="password" name="password" required></inputtext></div><br><br>
-    <text> If you are not registered:</text> <a href={{ url_for("registration") }}>Sign up here</a><br><br>
-    <button class="btn" type="submit">Sign In</button><br><br>
-
-
-    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
-</body>
-</html> -->

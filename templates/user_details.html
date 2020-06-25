@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
     <title>User Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='question_style2.css') }}">
     <style>
         *{
             font-family: Chilanka;
@@ -30,11 +30,19 @@
          background-size: cover;
         position: absolute;
         top: 25%;
-        left: 30%;}}</style>
+        left: 30%;}
+                            div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
 </head>
 <body>
-
-    <label style="color:white;">User Details of {{  user_name }}:</label><br><br>
+<div>
+    <label style="color:black;">User Details of {{  user_name }}:</label><br><br>
     <table >
     {% for detail in user_details %}
         <tr><td> ID</td><td>{{ detail.id }}</td></tr>
@@ -68,6 +76,7 @@
     </table><br>
     {% endif %}
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+</div>
 </body>
 </html>
 

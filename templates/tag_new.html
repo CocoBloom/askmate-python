@@ -16,12 +16,19 @@
          background-size: cover;
         position: absolute;
         top: 25%;
-        left: 30%;}}
+        left: 30%;}
+                                div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
     </style>
 </head>
 <body>
 
-    <form action="/question/{{ question_id }}/new-tag" method="POST">
+    <div><form action="/question/{{ question_id }}/new-tag" method="POST">
         <h1 style="color: white" for="tags">Choose a tag for the question:</h1>
             {% block error_message %}{% endblock %}<br><br>
           <select name="tag_name" id="tag_name">
@@ -32,7 +39,7 @@
             <textarea name="new_tag_type"></textarea>
           <br><br>
           <input class="button" type="submit" value="Submit">
-    </form>
+    </form></div>
     <br>
     <a class="button" href="/question/{{ question_id }}">Back to the page of {{ question_id }}</a>
 </body>

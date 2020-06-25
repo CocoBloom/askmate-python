@@ -16,16 +16,29 @@
         position: absolute;
        top: 25%;
         left: 30%;}}</style>
+        left: 37%;}
+            div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
     <title>Edit comment</title>
 </head>
 <body>
-<form action="/comment/{{ comment.id }}/edit" method="post" enctype="multipart/form-data">
+<div><form action="/comment/{{ comment.id }}/edit" method="post" enctype="multipart/form-data">
     <h1>Edit your comment</h1>
     <textarea name="editbody" rows="10" cols="50" >{{comment.message}}</textarea>
     <br>
     <button class="button" type="submit">Submit</button>
     <button class="button" type="reset">Reset</button>
     <br><br>
+
+</form>
     <a href="/question/{{ comment.question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+    </div>
+
 </body>
 </html>

@@ -18,16 +18,26 @@
         position: absolute;
         top: 25%;
         left: 30%;}}</style>
+        left: 37%;}
+
+                        div {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
+}
+    </style>
 </head>
 <body>
-    <form action="/question/{{ question_id }}/new-comment" method="post">
+    <div><form action="/question/{{ question_id }}/new-comment" method="post">
         <h1>Add comment to the {{ question_id }}. question!</h1>
         <textarea name="question_comment" rows="10" cols="50" placeholder="Place your comment here" required></textarea>
         <br>
         <button class="button" type="submit">Submit</button>
         <button class="button" type="reset">Reset</button>
         <br><br>
-        <a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
-    </form>
+        </form><a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+    </div>
 </body>
 </html>
