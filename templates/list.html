@@ -5,6 +5,7 @@
     <title>List of questions</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
     body {
     background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
@@ -15,8 +16,8 @@
 
     .buscar-caja {
  position: absolute;
- top: 5%;
- left: 81.5%;
+ top: 5.5%;
+ left: 81%;
  transform: translate(-50%, -50%);
  background: #2f3640;
  height: 40px;
@@ -57,7 +58,7 @@
  border: none;
  background: none;
  outline: none;
- float: left;
+ float: right;
  padding: 0;
  color: white;
  font-size: 16px;
@@ -66,17 +67,52 @@
  width: 0px;
  font-weight: bold;
 }
+.menu-bar {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background: #3f87a6;
+    text-align: center;
+    border-radius: 40px;
+}
+.menu-bar ul {
+    display: inline-flex;
+    list-style: none;
+    color: #fff;
+}
+.menu-bar ul li {
+    width: 120px;
+    margin: 10px;
+    padding: 10px;
+}
+.menu-bar ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+.menu-bar ul li:hover{
+    background: #799fb3;
+    border-radius: 3px;
+}
     </style>
 </head>
 <body>
-<br>
-<p style="color: white">
-    {%  if 'username' not in session %}
-        Click for registration <a style="color: #ffffff" href="/registration">Sign up</a> <a style="color: white">or for login <a style="color: white" href="/login">Sign in</a>
-    {% else %}
-        {{ 'Logged in as %s' % session['username'] }}
-        <a style="color: white" href={{ url_for('logout') }}>Logout</a>
-    {% endif %}</p>
+    <div class="menu-bar">
+        <ul>
+            <a href="/"><li><i class="fa fa-home"></i> Home</li></a>
+            <a href="/list"><li><i class="fa fa-clone"></i> All questions</li>
+            <a href="add-question"><li><i class="fa fa-edit"></i> Add question</li></a>
+            <a href="/users"><li><i class="fa fa-users"></i> List of Users</li></a>
+            <a href="/registration"><li><i class="fa fa-user"></i> Registration</li></a>
+        </ul>
+    </div>
+    <li><form action="/search" method="GET">
+         <div class="buscar-caja">
+            <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
+            <a class="buscar-btn">
+            <i class="fa fa-search"></i></a>
+            </div>
+     </form></li>
+    <br><br><br><br>
     <table >
         <thead>
             {% for question in list_of_questions%}
@@ -94,22 +130,10 @@
                 </tr>
             {%endfor%}
         </thead>
-    <caption id="caption"><img src="static/buttons/banner.png" alt="Ask-Question-Ask-Mate" width="120"><br>ASK_MATE<br>
-    <a href="add-question"><img src="static/buttons/realwhitebutton.png" alt="Ask-Question-Ask-Mate" width="60"></a>
-     <form action="/search" method="GET">
-         <div class="buscar-caja">
-            <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
-            <a class="buscar-btn">
-            <i class="fa fa-search"></i></a>
-            </div>
-     </form>
-     <a style="color: #ffffff" href="/users">List of Users</a></caption>
         {% for row in list_of_questions%}
             <tr>
                 <td width="50"><a href="/question/{{row.id}}/increase_view_number"> {{row.id}} </a></td>
-                <td width="150">
-                    {% if 'username' in session %}<a href="/user/{{ row.user_name }}" > {% endif %}
-                    {{ row.user_name }}</a></td>
+                <td width="150"><a href="/user/{{ row.user_name }}" >{{ row.user_name }}</a></td>
                 <td width="150">{{ row.submission_time }}</td>
                 <td width="60">{{ row.view_number }}</td>
                 <td width="60">{{ row.vote_number }}</td>
