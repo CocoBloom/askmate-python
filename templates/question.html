@@ -2,50 +2,94 @@
 <html lang="en">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='question_style.css') }}">
     <meta charset="UTF-8">
     <title>Question | Ask mate</title>
     <style>
-    body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;}
+        body {
+            background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            font-family: Chilanka;
+            margin-left:auto;
+            margin-right:auto;
+            text-align: center;
+        }
+
+        table {
+            background-color: #d4ff88;
+            font-family: Chilanka;
+            border: 1px solid teal;
+            text-align: center;
+            margin-left:auto;
+            margin-right:auto;
+            width: 40%;
+            opacity: 90%;
+            }
+
+     .button {
+        background-color:  #3f87a6;
+        border: 2px solid white;
+        color: white;
+        padding: 4px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20%;
+        }
     </style>
 </head>
+
 <body>
-<h1>{{ question.id }}. question</h1>
-
     <table>
-    <h3>Tags of question:</h3>
-    <tr>
-        {% for tag in tags %}
-        {% if tag.question_id == question_id %}
-                <td>{{ tag.name }}  </td>
-                <td><form action="/question/{{ question_id }}/tag/{{ tag.tag_id }}/delete" method="get">
-                    <button class="button"><i class="fa fa-close"></i></button></form></td>
-        {% endif %}
-    {%  endfor %}
-    </tr>
-    {% if user_of_question == session['username'] %}
-        <form action="/question/{{question_id}}/new-tag" >
-                    <button class="button">Add a new tag</button></form>
-    {% endif %}
-    </table>
-    <a href="/tags">Check tags</a>
-    <br>
-
-    <h2> {{ question.title }}</h2>
-    <table style="width:50%">
-            <tr><td>{{ question.message}}</td><td></td>
+    <tr><td style="text-text-replace: uppercase;"><h1>{{ question.id }}. question</h1></td></tr>
+        <tr><td><h2> {{ question.title }}</h2></td></tr>
+        <tr><td>{{ question.message}}</td><td></td>
                 {% if question.image is not none and question.image != '' %}
                     <td><img src="/{{ question.image}}" alt="pimpirimpi" height="100"></td>
-                {% endif %}
-            </tr>
-    </table>
-<table>
-            <h3>Comments of question</h3>
+                {% endif %}</tr>
+          <tr><td><br> {{ question.submission_time }} </td></tr>
+    </table><br>
+
+   <table>
+    <tr><td><p1>Tags of question:</p1></td></tr>
+    <tr>
+    {% for tag in tags %}
+        {% if tag.question_id == question_id %}
+            <td>{{ tag.name }}  </td>
+            <td><form action="/question/{{ question_id }}/tag/{{ tag.tag_id }}/delete" method="get">
+                <button class="button"><i class="fa fa-close"></i></button></form></td>
+        {% endif %}
+    {%  endfor %}</tr>
+    <tr><td>{% if user_of_question == session['username'] %}
+        <form action="/question/{{question_id}}/new-tag" ><button class="button">Add a new tag</button></form>
+    {% endif %}</td></tr>
+    </table><br>
+
+    <table>
+        <tr>
+        <td><p1>Edit/Delete your question:</p1></td>
+            <td>{% if session['username'] == user_of_question %}
+            <form action="/question/{{question.id}}/edit" >
+                <button class="button">Edit</button>
+            </form>
+            </td>
+            <td>
+            <form action="/question/{{question.id}}/delete" method="post">
+                <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
+            </form>
+            {% endif %}</td>
+
+        </tr>
+    </table><br>
+
+
+    <table>
+        <tr><td><h3>Comments of question</h3></td></tr>
             {% for comment in comments %}
                 {% if comment.question_id ==question_id %}
                     <tr><td>{{comment.submission_time}}</td>
@@ -66,37 +110,19 @@
                 </form></td></tr>
                 {% endif %}
                 {% endif %}
-            {% endfor %}
-
-            <tr><td><br> {{ question.submission_time }} </td></tr>
-    </table>
-    <br>
-    <table>
-        <tr>
-            <td>{% if session['username'] == user_of_question %}
-            <form action="/question/{{question.id}}/edit" >
-                <button class="button">Edit</button>
-            </form>
-            </td>
-            <td>
-            <form action="/question/{{question.id}}/delete" method="post">
-                <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
-            </form>
-            {% endif %}</td>
-            <td>
+            {% endfor %}<tr>
+        <tr><td>
             <form action="/question/{{question.id}}/new-comment" method="get">
                 <button class="button">Comment</button>
             </form>
-            </td>
-        </tr>
-    </table>
-    <br>
+            </td><td><td><a href="/tags">Check tags</a></td></tr>
+    </table><br>
 
-    <h2> Answers: </h2>
-    {% for answer in answers %}
-        <table style="width:50%">
-        <tr style="height:100px" >
-            <td>> {{ answer.submission_time }} </td>
+    <table>
+        <tr><td><h3> Answers: </h3></td></tr>
+        <tr><td><form action="/question/{{question.id}}/new-answer"><button class="button">Add answer</button></form></td></tr>
+        {% for answer in answers %}
+            <tr style="height:100px" ><td>{{ answer.submission_time }} </td>
             {% if answer.if_accepted == 1 %}
                         <td style="color:crimson">
                     {%  else %}
@@ -138,13 +164,10 @@
                     {%  else %}
                         Accept
                     {%  endif %}
-                </i></button>
-                </form>
-            {% endif %}</td>
-        </tr>
-        </table>
-        <table>
-        <label style="color: white">Comments:</label>
+                </i></button></form>
+            {% endif %}</td></tr>
+
+        <tr><td><p1>Comments of Answer:</p1></td></tr>
          {%  for comment in comments %}
             {% if comment.answer_id == answer.id %}
                 <tr><td>{{comment.submission_time}}</td>
@@ -166,20 +189,10 @@
                 {% endif %}</td></tr>
             {% endif %}
         {% endfor %}
-            <td>
-                <form action="/answer/{{answer.id}}/new-comment" >
-                <button class="button">Add comment</button>
-                </form>
-            </td>
-        </table>
+            <td><form action="/answer/{{answer.id}}/new-comment"><button class="button">Add comment</button></form></td>
     {% endfor %}
+    </table>
 
-
-    <br>
-    <form action="/question/{{question.id}}/new-answer">
-        <button class="button">Add answer</button>
-    </form>
-    <br><br>
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
 
 </body>
