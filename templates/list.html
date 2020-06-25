@@ -98,22 +98,22 @@
 <body>
     <div class="menu-bar">
         <ul>
-            <a href="/"><li><i class="fa fa-home"></i> Home</li></a>
-            <a href="/list"><li><i class="fa fa-clone"></i> All questions</li>
-            <a href="add-question"><li><i class="fa fa-edit"></i> Add question</li></a>
-            <a href="/users"><li><i class="fa fa-users"></i> List of Users</li></a>
-            <a href="/registration"><li><i class="fa fa-user"></i> Registration</li></a>
+            <li><a href="/"><i class="fa fa-home"></i>  Home</a></li>
+            <li><a href="/list"><i class="fa fa-clone"></i>  All questions</a></li>
+            <li><a href="add-question"><i class="fa fa-edit"></i>  Add question</a></li>
+            <li><a href="/users"><i class="fa fa-users"></i>  List of Users</a></li>
+            <li><a href="/registration"><i class="fa fa-user"></i>  Registration</a></li>
         </ul>
     </div>
-    <li><form action="/search" method="GET">
+    <form action="/search" method="GET">
          <div class="buscar-caja">
             <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
             <a class="buscar-btn">
             <i class="fa fa-search"></i></a>
             </div>
-     </form></li>
+     </form>
     <br><br><br><br>
-    <table >
+    <table>
         <thead>
             {% for question in list_of_questions%}
                 <tr>
@@ -153,7 +153,6 @@
         {%endfor%}
     </table>
     </form>
-
     {% block main %}{% endblock %}
 </body>
 </html>
