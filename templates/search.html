@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         *{
             font-family: Chilanka;
@@ -13,7 +14,6 @@
         background-position: center;
          background-size: cover;}</style>
     <title>Search of questions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <table >
@@ -30,8 +30,6 @@
                 </tr>
             {%endfor%}
         </thead>
-    <caption id="caption"><img src="static/buttons/banner.png" alt="Ask-Question-Ask-Mate" width="120"><br>ASK_MATE<br>
-    <a href="add-question"><img src="static/buttons/realwhitebutton.png" alt="Ask-Question-Ask-Mate" width="60"></a>
      <form action="/search" method="GET">
      <label  for="search_text">Search for question:</label>
      <input id="search_text" name="search_text" type="text">
