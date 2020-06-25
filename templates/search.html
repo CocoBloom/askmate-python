@@ -30,6 +30,7 @@
         {% for row in list_of_questions%}
             <tr>
                 <td width="50"><a href={{url_for('increase_view_number', question_id=row.id)}}> {{row.id}} </a></td>
+                <td width="50"><a href="/user/{{ row.user_name }}">{{ row.user_name }}</a></td>
                 <td width="150">{{ row.submission_time }}</td>
                 <td width="60">{{ row.view_number }}</td>
                 <td width="60">{{ row.vote_number }}</td>
