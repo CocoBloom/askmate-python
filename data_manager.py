@@ -460,10 +460,6 @@ def change_acceptance(cursor, answer_id):
     """
     cursor.execute(query, {"answer_id": answer_id})
 
-
-
-
-
 @connection.connection_handler
 def get_user_questions(cursor, user_name):
     query = """SELECT question.id, question.title FROM question LEFT JOIN users ON user_id = users.id WHERE users.user_name =%(user_name)s"""
@@ -536,10 +532,23 @@ def get_user_id_by_username(cursor, username):
 
 
 @connection.connection_handler
+def get_reputation(cursor, user_id):
+    query = '''SELECT reputation FROM users
+                WHERE id = %(user_id)s'''
+    cursor.execute(query,{'user_id':user_id})
+    reputation = cursor.fetchone()['reputation']
+    print("reputation num",reputation)
+    return reputation
+
+
+@connection.connection_handler
 def update_reputation(cursor, user_id, num):
+    print(user_id,"num",num)
     cursor.execute (f'''UPDATE users
-                SET reputation= reputation + {num}
+                SET reputation= {num}
                 WHERE id = {user_id};''')
+
+
 
 
 @connection.connection_handler

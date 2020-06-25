@@ -215,7 +215,8 @@ def delete_comment(comment_id):
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
     user_id = data_manager.get_display_question(question_id)['user_id']
-    data_manager.update_reputation(user_id, num=5)
+    reputation = data_manager.get_reputation(user_id=user_id)
+    data_manager.update_reputation(user_id, (reputation+5))
     return redirect('/list')
 
 
@@ -224,7 +225,8 @@ def vote_up_question(question_id):
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
     user_id = data_manager.get_display_question(question_id)['user_id']
-    data_manager.update_reputation(user_id, num=-2)
+    reputation = data_manager.get_reputation(user_id=user_id)
+    data_manager.update_reputation(user_id, (reputation-2))
     return redirect('/list')
 
 
@@ -234,7 +236,8 @@ def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
     user_id = data_manager.get_display_question(question_id)['user_id']
-    data_manager.update_reputation(user_id, num=10)
+    reputation = data_manager.get_reputation(user_id=user_id)
+    data_manager.update_reputation(user_id, (reputation+10))
     return redirect('/question/' + str(question_id))
 
 
@@ -244,7 +247,8 @@ def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
     user_id = data_manager.get_display_question(question_id)['user_id']
-    data_manager.update_reputation(user_id, num=-2)
+    reputation = data_manager.get_reputation(user_id=user_id)
+    data_manager.update_reputation(user_id, (reputation-2))
     return redirect('/question/' + str(question_id))
 
 
@@ -252,7 +256,6 @@ def vote_down_answer(answer_id):
 def search_for_questions():
     search_text = request.args.get('search_text').replace('+',' ')
     list_of_questions = data_manager.search_for_question(search_text)
-    print (list_of_questions)
     return render_template("search.html", search_text=search_text, list_of_questions=list_of_questions)
 
 
@@ -344,8 +347,8 @@ def users():
 @app.route('/user/<user_name>')
 @authenticate
 def user_details(user_name):
-    user_id = data_manager.get_user_id_by_username(username=user_name)
-    data_manager.more_user_details(user_id=user_id)
+    # user_id = data_manager.get_user_id_by_username(username=user_name)
+    # data_manager.more_user_details(user_id=user_id)
     user_detail = data_manager.get_user_details(user_name=user_name)
     user_questions = data_manager.get_user_questions(user_name=user_name)
     user_answers = data_manager.get_user_answers(user_name=user_name)
@@ -368,7 +371,6 @@ def accept_answer(answer_id):
         data_manager.update_reputation_by_acceptance(answer_id)
         data_manager.change_acceptance(answer_id)
     return redirect('/question/' + str(question_id))
-
 
 
 if __name__ == "__main__":
