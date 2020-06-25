@@ -96,9 +96,8 @@ def get_display_question(cursor: RealDictCursor, question_id) -> list:
 @connection.connection_handler
 def get_display_answers(cursor, which_id, question_id) -> list:
     cursor.execute(f"""
-    SELECT answer.*, u.user_name
+    SELECT *
     FROM answer
-    JOIN users u on answer.user_id = u.id
     WHERE answer.{which_id} = {question_id}
     ORDER BY submission_time
     """)
@@ -111,7 +110,7 @@ def get_display_comment(cursor, comment_id) -> list:
     SELECT comment.*, u.user_name
     FROM comment
     JOIN users u on comment.user_id = u.id
-    WHERE id = {comment_id}
+    WHERE comment.id = {comment_id}
     """)
     return cursor.fetchone()
 
@@ -438,7 +437,7 @@ def get_user_details_by_username(cursor, username):
 
 
 @connection.connection_handler
-def update_reputation_by_acceptance(cursor, answer_id):
+def update_reputation_by_acceptance(cursor, answer_id, user_id_for_answer):
     query = """
     UPDATE users
     SET reputation =
@@ -446,9 +445,9 @@ def update_reputation_by_acceptance(cursor, answer_id):
     ELSE reputation + 15
     END
     FROM answer a
-    WHERE users.id = a.user_id AND a.id = %(answer_id)s 
+    WHERE users.id = a.user_id AND a.id = %(answer_id)s  AND users.id != %(user_id_for_answer)s 
     """
-    cursor.execute(query, {"answer_id": answer_id})
+    cursor.execute(query, {"answer_id": answer_id, 'user_id_for_answer': user_id_for_answer})
 
 
 @connection.connection_handler
@@ -571,12 +570,12 @@ def count_tags(cursor):
 @connection.connection_handler
 def get_user_name_by_question_id(cursor, question_id):
     query = """
-    SELECT user_name
+    SELECT user_name, users.id AS id
     FROM users
     JOIN question q on users.id = q.user_id
     WHERE q.id = %(question_id)s"""
     cursor.execute(query, {"question_id": question_id})
-    user_name = cursor.fetchone()['user_name']
-    return user_name
+    user_name_id= cursor.fetchone()
+    return user_name_id
 
 

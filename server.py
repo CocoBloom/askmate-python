@@ -65,8 +65,7 @@ def question_page(question_id):
     answers = data_manager.get_display_answers('question_id', question_id)
     comments = data_manager.get_comments(question_id)
     tags = data_manager.get_tags_of_question()
-    user_of_question = data_manager.get_user_name_by_question_id(question_id)
-
+    user_of_question= data_manager.get_user_name_by_question_id(question_id) ['user_name']
     return render_template("question.html", question_id=question_id, question=question_details, answers=answers,
                            comments=comments, user_of_question=user_of_question, tags=tags)
 
@@ -379,8 +378,9 @@ def accept_answer(answer_id):
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
     user_questions = data_manager.get_user_questions(session['username'])
     question_ids = [q['id'] for q in user_questions]
+    user_id_for_answer = data_manager.get_user_name_by_question_id(question_id)['id']
     if question_id in question_ids:
-        data_manager.update_reputation_by_acceptance(answer_id)
+        data_manager.update_reputation_by_acceptance(answer_id, user_id_for_answer )
         data_manager.change_acceptance(answer_id)
     return redirect('/question/' + str(question_id))
 
