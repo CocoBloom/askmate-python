@@ -1,10 +1,10 @@
-from flask import Flask, request, render_template, redirect, session, url_for, escape
+from flask import Flask, request, render_template, redirect, session, url_for, escape, flash
 from functools import wraps
 import data_manager
-from datetime import datetime
-import time
 import os
 import util
+from tkinter import *
+from tkinter import messagebox
 
 
 app = Flask(__name__)
@@ -12,31 +12,42 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
-def authenticate(func):
-    @wraps(func)
-    def wrapper(*args,**kwargs):
-        if 'username' not in session:
-            return redirect(url_for('login'))
-        return func(*args,**kwargs)
-    return wrapper
+def inject_variables(page_if_false):
+    def authenticate(func):
+        @wraps(func)
+        def wrapper(*args,**kwargs):
+            if 'question_id' not in kwargs:
+                try:
+                    question_id = (data_manager.get_question_id(kwargs['answer_id']))['question_id']
+                except:
+                    question_id = None
+            else:
+                question_id =kwargs['question_id']
+            if 'username' not in session:
+                window= Tk()
+                window.eval('tk::PlaceWindow %s center' % window.winfo_toplevel())
+                window.withdraw()
+                if messagebox.askokcancel("Warning", "You need to login first", icon="error") == True:
+                    page= 'login'
+                else:
+                    page= page_if_false
+                window.deiconify()
+                window.destroy()
+                window.quit()
+                return redirect(url_for(page, question_id = question_id))
+            return func(*args,**kwargs)
+        return wrapper
+    return authenticate
 
 
 @app.route("/")
 def display_main_list():
-    if 'username' in session:
-        message = 'Logged in as %s' % escape(session['username'])
-    else:
-        message = ''
     list_of_questions = data_manager.get_main_list(5)
-    return render_template("mainlist.html",login_message=message, list_of_questions=list_of_questions)
+    return render_template("mainlist.html",list_of_questions=list_of_questions)
 
 
 @app.route('/list')
 def display_list():
-    if 'username' in session:
-        message= 'Logged in as %s' % escape(session['username'])
-    else:
-        message = ''
     mode = request.args.get('order_by')
     direction = request.args.get('order_direction')
     if mode:
@@ -45,7 +56,7 @@ def display_list():
         list_of_questions = data_manager.get_display_list(mode=mode, direction=direction)
     else:
         list_of_questions = data_manager.get_display_list()
-    return render_template("list.html",login_message=message, list_of_questions=list_of_questions)
+    return render_template("list.html", list_of_questions=list_of_questions)
 
 
 @app.route("/question/<int:question_id>")
@@ -54,12 +65,14 @@ def question_page(question_id):
     answers = data_manager.get_display_answers('question_id', question_id)
     comments = data_manager.get_comments(question_id)
     tags = data_manager.get_tags_of_question()
+    user_of_question = data_manager.get_user_name_by_question_id(question_id)
+
     return render_template("question.html", question_id=question_id, question=question_details, answers=answers,
-                           comments=comments, tags=tags)
+                           comments=comments, user_of_question=user_of_question, tags=tags)
 
 
 @app.route('/add-question', methods=["GET", "POST"])
-@authenticate
+@inject_variables('display_list')
 def add_question():
     if request.method == "POST":
         dictionary_of_questions = data_manager.create_new_question()
@@ -75,7 +88,7 @@ def add_question():
         return render_template('ask_questions.html')
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
-@authenticate
+@inject_variables('question_page')
 def delete_question(question_id):
     if request.method == 'POST':
         image = data_manager.get_display_question(question_id)['image']
@@ -85,7 +98,7 @@ def delete_question(question_id):
     return redirect('/list')
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
-@authenticate
+@inject_variables('question_page')
 def edit_question(question_id):
     question_details = data_manager.get_display_question(question_id)
     if request.method == 'GET':
@@ -107,7 +120,7 @@ def edit_question(question_id):
 
 
 @app.route('/answer/<answer_id>/edit', methods=["GET", "POST"])
-@authenticate
+@inject_variables('display_list')
 def edit_answer(answer_id):
     answer_details = data_manager.get_display_answers('id', answer_id)
     if request.method == 'GET':
@@ -129,7 +142,7 @@ def edit_answer(answer_id):
 
 
 @app.route('/comment/<comment_id>/edit', methods=["GET", "POST"])
-@authenticate
+@inject_variables('display_list')
 def edit_comment(comment_id):
     comment_details = data_manager.get_display_comment(comment_id)
     if request.method == 'GET':
@@ -147,7 +160,7 @@ def edit_comment(comment_id):
 
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
-@authenticate
+@inject_variables('question_page')
 def add_new_answer(question_id):
     if request.method == "POST":
         new_answer = request.form["answer"]
@@ -163,7 +176,7 @@ def add_new_answer(question_id):
 
 
 @app.route('/answer/<answer_id>/delete')
-@authenticate
+@inject_variables('display_list')
 def delete_answer(answer_id):
     question_id = data_manager.get_question_id(answer_id)['question_id']
     image = data_manager.get_display_answers('question_id',question_id)[0]['image']
@@ -174,7 +187,7 @@ def delete_answer(answer_id):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
-@authenticate
+@inject_variables('question_page')
 def add_comment_to_answer(answer_id):
     if request.method == 'POST':
         question_id = (data_manager.get_question_id(answer_id))['question_id']
@@ -187,7 +200,7 @@ def add_comment_to_answer(answer_id):
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
-@authenticate
+@inject_variables('question_page')
 def add_comment_to_question(question_id):
     if request.method == 'POST':
         question_comment = request.form['question_comment']
@@ -199,7 +212,7 @@ def add_comment_to_question(question_id):
 
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
-@authenticate
+@inject_variables('display_list')
 def delete_comment(comment_id):
     answer_id = data_manager.get_id_from_comment(comment_id=comment_id)['answer_id']
     try:
@@ -211,7 +224,7 @@ def delete_comment(comment_id):
 
 
 @app.route('/question/<question_id>/vote_up')
-@authenticate
+@inject_variables('display_list')
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
     user_id = data_manager.get_display_question(question_id)['user_id']
@@ -221,7 +234,7 @@ def vote_up_question(question_id):
 
 
 @app.route('/question/<question_id>/vote_down')
-@authenticate
+@inject_variables('display_list')
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
     user_id = data_manager.get_display_question(question_id)['user_id']
@@ -231,7 +244,7 @@ def vote_down_question(question_id):
 
 
 @app.route('/answer/<answer_id>/vote_up')
-@authenticate
+@inject_variables('display_list')
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
@@ -242,7 +255,7 @@ def vote_up_answer(answer_id):
 
 
 @app.route('/answer/<answer_id>/vote_down')
-@authenticate
+@inject_variables('display_list')
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
@@ -260,7 +273,7 @@ def search_for_questions():
 
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
-@authenticate
+@inject_variables('question_page')
 def add_new_tag(question_id):
     if request.method == 'POST':
         tag_name = request.form['tag_name']
@@ -285,7 +298,7 @@ def add_new_tag(question_id):
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
-@authenticate
+@inject_variables('question_page')
 def delete_tag(question_id, tag_id):
     data_manager.delete_tags(question_id=question_id,tag_id=tag_id)
     return redirect('/question/' + str(question_id))
@@ -338,14 +351,14 @@ def logout():
 
 
 @app.route('/users')
-@authenticate
+@inject_variables('display_list')
 def users():
     users = data_manager.get_users()
     return render_template('users.html', users = users)
 
 
 @app.route('/user/<user_name>')
-@authenticate
+@inject_variables('display_list')
 def user_details(user_name):
     # user_id = data_manager.get_user_id_by_username(username=user_name)
     # data_manager.more_user_details(user_id=user_id)
@@ -356,13 +369,12 @@ def user_details(user_name):
     return render_template('user_details.html',user_name=user_name, user_details=user_detail,user_questions=user_questions, user_answers=user_answers, user_comments=user_comments)
 
 @app.route('/tags')
-@authenticate
 def display_tags():
     count_of_tags = data_manager.count_tags()
     return render_template('tags.html',count_of_tags=count_of_tags)
 
 @app.route('/answer/<answer_id>/accept_answer')
-@authenticate
+@inject_variables('display_list')
 def accept_answer(answer_id):
     question_id = data_manager.get_question_id_by_answer_id(answer_id)['question_id']
     user_questions = data_manager.get_user_questions(session['username'])

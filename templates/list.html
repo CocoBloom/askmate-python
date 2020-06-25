@@ -70,10 +70,11 @@
 </head>
 <body>
 <br>
-<p style="color: white"> {{ login_message }}
-    {%  if login_message == '' %}
-        Click for registration <a style="color: white" href="/registration">Sign up</a> <a style="color: white">or for login <a style="color: white" href="/login">Sign in</a>
+<p style="color: white">
+    {%  if 'username' not in session %}
+        Click for registration <a style="color: #ffffff" href="/registration">Sign up</a> <a style="color: white">or for login <a style="color: white" href="/login">Sign in</a>
     {% else %}
+        {{ 'Logged in as %s' % session['username'] }}
         <a style="color: white" href={{ url_for('logout') }}>Logout</a>
     {% endif %}</p>
     <table >
@@ -102,11 +103,13 @@
             <i class="fa fa-search"></i></a>
             </div>
      </form>
-     <a style="color: white" href="/users">List of Users</a></caption>
+     <a style="color: #ffffff" href="/users">List of Users</a></caption>
         {% for row in list_of_questions%}
             <tr>
                 <td width="50"><a href="/question/{{row.id}}/increase_view_number"> {{row.id}} </a></td>
-                <td width="150"><a href="/user/{{ row.user_name }}" >{{ row.user_name }}</a></td>
+                <td width="150">
+                    {% if 'username' in session %}<a href="/user/{{ row.user_name }}" > {% endif %}
+                    {{ row.user_name }}</a></td>
                 <td width="150">{{ row.submission_time }}</td>
                 <td width="60">{{ row.view_number }}</td>
                 <td width="60">{{ row.vote_number }}</td>

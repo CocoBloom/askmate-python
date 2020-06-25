@@ -96,9 +96,10 @@ def get_display_question(cursor: RealDictCursor, question_id) -> list:
 @connection.connection_handler
 def get_display_answers(cursor, which_id, question_id) -> list:
     cursor.execute(f"""
-    SELECT *
+    SELECT answer.*, u.user_name
     FROM answer
-    WHERE {which_id} = {question_id}
+    JOIN users u on answer.user_id = u.id
+    WHERE answer.{which_id} = {question_id}
     ORDER BY submission_time
     """)
     return cursor.fetchall()
@@ -107,8 +108,9 @@ def get_display_answers(cursor, which_id, question_id) -> list:
 @connection.connection_handler
 def get_display_comment(cursor, comment_id) -> list:
     cursor.execute(f"""
-    SELECT *
+    SELECT comment.*, u.user_name
     FROM comment
+    JOIN users u on comment.user_id = u.id
     WHERE id = {comment_id}
     """)
     return cursor.fetchone()
@@ -242,7 +244,9 @@ def create_new_answer(answer, question_id, image, user_id):
 
 @connection.connection_handler
 def get_comments(cursor, question_id):
-    query = """SELECT * FROM comment ORDER BY submission_time"""
+    query = """SELECT comment.*, u.user_name FROM comment 
+    JOIN users u on comment.user_id = u.id
+    ORDER BY submission_time"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchall()
 
@@ -562,3 +566,17 @@ def count_tags(cursor):
     cursor.execute(query)
     count_of_tags = cursor.fetchall()
     return count_of_tags
+
+
+@connection.connection_handler
+def get_user_name_by_question_id(cursor, question_id):
+    query = """
+    SELECT user_name
+    FROM users
+    JOIN question q on users.id = q.user_id
+    WHERE q.id = %(question_id)s"""
+    cursor.execute(query, {"question_id": question_id})
+    user_name = cursor.fetchone()['user_name']
+    return user_name
+
+
