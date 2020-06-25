@@ -96,8 +96,9 @@ def get_display_question(cursor: RealDictCursor, question_id) -> list:
 @connection.connection_handler
 def get_display_answers(cursor, which_id, question_id) -> list:
     cursor.execute(f"""
-    SELECT *
+    SELECT answer.*, u.user_name
     FROM answer
+    JOIN users u on answer.user_id = u.id
     WHERE answer.{which_id} = {question_id}
     ORDER BY submission_time
     """)
