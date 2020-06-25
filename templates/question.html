@@ -28,9 +28,10 @@
         {% endif %}
     {%  endfor %}
     </tr>
-    <form action="/question/{{question_id}}/new-tag" >
-                <button class="button">Add a new tag</button>
-                </form>
+    {% if user_of_question == session['username'] %}
+        <form action="/question/{{question_id}}/new-tag" >
+                    <button class="button">Add a new tag</button></form>
+    {% endif %}
     </table>
     <a href="/tags">Check tags</a>
     <br>
@@ -42,7 +43,8 @@
                     <td><img src="/{{ question.image}}" alt="pimpirimpi" height="100"></td>
                 {% endif %}
             </tr>
-    </table><table>
+    </table>
+<table>
             <h3>Comments of question</h3>
             {% for comment in comments %}
                 {% if comment.question_id ==question_id %}
@@ -53,13 +55,16 @@
                     {% else %}
                         <td width="120"></td>
                     {% endif %}
-                <td><form action="/comment/{{comment.id}}/edit" >
-                <button class="button">Edit</button>
-                </form></td>
+                {% if session['username'] == comment.user_name%}
+                    <td><form action="/comment/{{comment.id}}/edit" >
+                    <button class="button">Edit</button>
+                    </form></td>
+                {% endif %}
+                {% if session['username'] == comment.user_name or session['username'] == user_of_question%}
                     <td><form action="/comments/{{comment.id}}/delete">
                         <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
-
                 </form></td></tr>
+                {% endif %}
                 {% endif %}
             {% endfor %}
 
@@ -68,7 +73,8 @@
     <br>
     <table>
         <tr>
-            <td><form action="/question/{{question.id}}/edit" >
+            <td>{% if session['username'] == user_of_question %}
+            <form action="/question/{{question.id}}/edit" >
                 <button class="button">Edit</button>
             </form>
             </td>
@@ -76,7 +82,7 @@
             <form action="/question/{{question.id}}/delete" method="post">
                 <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
             </form>
-            </td>
+            {% endif %}</td>
             <td>
             <form action="/question/{{question.id}}/new-comment" method="get">
                 <button class="button">Comment</button>
@@ -114,17 +120,17 @@
                 <button><img src="/static/buttons/try2.png" width="18"></button>
                 </form>
             </td>
-            <td>
+            <td> {% if session['username'] == answer.user_name %}
                 <form action="/answer/{{ answer.id }}/edit">
                 <button class="button">Edit</button>
                 </form>
-            </td>
-            <td>
+            {% endif %}</td>
+            <td>{%  if session['username'] == answer.user_name or session['username'] == user_of_question %}
                 <form action="/answer/{{answer.id}}/delete" >
                 <button class="button"><i class="fa fa-trash"></i></button>
                 </form>
-            </td>
-            <td>
+            {%  endif %}</td>
+            <td>{% if session['username'] == user_of_question %}
                 <form action="{{url_for('accept_answer', answer_id= answer.id )}}" >
                 <button class="button"><i class="fas fa-umbrella-beach">
                     {% if answer.if_accepted == 1 %}
@@ -134,7 +140,7 @@
                     {%  endif %}
                 </i></button>
                 </form>
-            </td>
+            {% endif %}</td>
         </tr>
         </table>
         <table>
@@ -148,12 +154,16 @@
                 {% else %}
                     <td width="120"></td>
                 {% endif %}
-                <td><form action="/comment/{{comment.id}}/edit" >
+                <td>{%  if session['username'] == comment.user_name %}
+                <form action="/comment/{{comment.id}}/edit" >
                 <button class="button">Edit</button>
-                </form></td>
-                <td><form action="/comments/{{comment.id}}/delete">
+                </form>
+                {%  endif %}</td>
+                <td>{%  if session['username'] == comment.user_name or session['username'] == user_of_question %}
+                <form action="/comments/{{comment.id}}/delete">
                     <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
-                </form></td></tr>
+                </form>
+                {% endif %}</td></tr>
             {% endif %}
         {% endfor %}
             <td>

@@ -33,7 +33,7 @@
         <tr><td>Reputation</td><td>{{ detail.reputation }}</td></tr>
     {%  endfor %}
     </table><br>
-
+{% if session['username'] == user_name %}
     <label>Questions that the user created</label>
     <table>
         {% for question in user_questions %}
@@ -54,6 +54,9 @@
             <tr><td><a href="/question/{{ comment.question_id }}">{{ comment.question_id }}</a></td><td>{{ comment.message }}</td></tr>
         {% endfor %}
     </table><br>
+    {% endif %}
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
 </body>
 </html>
+
+
