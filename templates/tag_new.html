@@ -23,11 +23,9 @@
   padding: 50px;
   opacity: 85%;
   margin: 20px;
-}
-    </style>
+}</style>
 </head>
 <body>
-
     <div><form action="/question/{{ question_id }}/new-tag" method="POST">
         <h1 style="color: white" for="tags">Choose a tag for the question:</h1>
             {% block error_message %}{% endblock %}<br><br>
@@ -41,6 +39,6 @@
           <input class="button" type="submit" value="Submit">
     </form></div>
     <br>
-    <a class="button" href="/question/{{ question_id }}">Back to the page of {{ question_id }}</a>
+    <a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
 </body>
 </html>

@@ -15,19 +15,12 @@
          background-size: cover;
         position: absolute;
        top: 25%;
-        left: 30%;}}</style>
-        left: 37%;}
-            div {
-  width: 500px;
-  background: #d4ff88;
-  padding: 50px;
-  opacity: 85%;
-  margin: 20px;
-}
+        left: 30%;}
     </style>
     <title>Edit comment</title>
 </head>
 <body>
+
 <div><form action="/comment/{{ comment.id }}/edit" method="post" enctype="multipart/form-data">
     <h1>Edit your comment</h1>
     <textarea name="editbody" rows="10" cols="50" >{{comment.message}}</textarea>
@@ -37,8 +30,9 @@
     <br><br>
 
 </form>
-    <a href="/question/{{ comment.question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
     </div>
+    <a href="/question/{{ comment.question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+
 
 </body>
 </html>
