@@ -385,6 +385,11 @@ def accept_answer(answer_id):
     return redirect('/question/' + str(question_id))
 
 
+@app.route('/registration_2')
+def registration_2():
+    pass
+
+
 if __name__ == "__main__":
     app.run(debug=True,
             port=8000,
