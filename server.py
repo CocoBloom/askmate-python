@@ -385,6 +385,11 @@ def accept_answer(answer_id):
     return redirect('/question/' + str(question_id))
 
 
+@app.route('/registration_2')
+def registration_2():
+    pass
+
+
 @app.route('/login_2')
 def login_2():
     pass
