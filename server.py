@@ -390,6 +390,11 @@ def registration_2():
     pass
 
 
+@app.route('/login_2')
+def login_2():
+    pass
+
+
 if __name__ == "__main__":
     app.run(debug=True,
             port=8000,
