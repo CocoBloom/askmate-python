@@ -1,4 +1,9 @@
 @import "https://use.fontawesome.com/releases/v5.5.0/css/all.css";
+
+* {
+    font-family: Chilanka, serif;
+}
+
 body{
   margin: 0;
   padding: 0;
@@ -6,6 +11,7 @@ body{
   background-color: black;
   background-size: cover;
 }
+
 .login-box{
   width: 280px;
   position: absolute;
@@ -14,6 +20,7 @@ body{
   transform: translate(-50%,-50%);
   color: white;
 }
+
 .login-box h1{
   float: left;
   font-size: 40px;
@@ -21,7 +28,8 @@ body{
   margin-bottom: 50px;
   padding: 13px 0;
 }
-.textbox{
+
+.textbox {
   width: 100%;
   overflow: hidden;
   font-size: 20px;
@@ -29,12 +37,14 @@ body{
   margin: 8px 0;
   border-bottom: 1px solid #4caf50;
 }
-.textbox i{
+
+.textbox i {
   width: 26px;
   float: left;
   text-align: center;
 }
-.textbox input{
+
+.textbox input {
   border: none;
   outline: none;
   background: none;
@@ -44,7 +54,8 @@ body{
   float: left;
   margin: 0 10px;
 }
-.btn{
+
+.btn {
   width: 100%;
   background: none;
   border: 2px solid #4caf50;
@@ -53,4 +64,12 @@ body{
   font-size: 18px;
   cursor: pointer;
   margin: 12px 0;
+}
+
+.login-container {
+  width: 500px;
+  background: #d4ff88;
+  padding: 50px;
+  opacity: 85%;
+  margin: 20px;
 }
