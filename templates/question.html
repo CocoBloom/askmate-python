@@ -154,7 +154,7 @@
         <tr><td><h2> {{ question.title }}</h2></td></tr>
         <tr><td>{{ question.message}}</td><td></td>
                 {% if question.image is not none and question.image != '' %}
-                    <td><img src="/{{ question.image}}" alt="pimpirimpi" height="100"></td>
+                    <td><img src="/static/{{ question.image }}" alt="caption" height="100"></td>
                 {% endif %}</tr>
           <tr><td><br> {{ question.submission_time }} </td></tr>
     </table><br>

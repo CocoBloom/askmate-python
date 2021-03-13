@@ -1,0 +1,123 @@
+
+    *{
+        font-family: Chilanka;
+    }
+    body {
+
+            background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            font-family: Chilanka;
+            margin-left:auto;
+            margin-right:auto;
+            text-align: center;
+        }
+
+        table {
+            background-color: #d4ff88;
+            font-family: Chilanka;
+            border: 1px solid teal;
+            text-align: center;
+            margin-left:auto;
+            margin-right:auto;
+            width: 40%;
+            opacity: 90%;
+            }
+
+     .button {
+        background-color:  #3f87a6;
+        border: 2px solid white;
+        color: white;
+        padding: 4px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20%;
+        }
+
+
+    .buscar-caja {
+ position: absolute;
+ top: 5.5%;
+ left: 81%;
+ transform: translate(-50%, -50%);
+ background: #2f3640;
+ height: 40px;
+ border-radius: 40px;
+ padding: 10px;
+}
+
+.buscar-caja:hover > .buscar-txt {
+ width: 240px;
+ padding: 0 6px;
+}
+
+.buscar-caja:hover > .buscar-btn {
+ background: white;
+ color: black;
+}
+
+.buscar-btn {
+ color: #e84118;
+ float: right;
+ width: 40px;
+ height: 40px;
+ border-radius: 50%;
+ background: #2f3640;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ transition: 0.4s;
+ color: white;
+ cursor: pointer;
+}
+
+.buscar-btn > i {
+ font-size: 30px;
+}
+
+.buscar-txt {
+ border: none;
+ background: none;
+ outline: none;
+ float: right;
+ padding: 0;
+ color: white;
+ font-size: 16px;
+ transition: 0.4s;
+ line-height: 40px;
+ width: 0px;
+ font-weight: bold;
+}
+.menu-bar {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background: #3f87a6;
+    text-align: center;
+    border-radius: 40px;
+}
+.menu-bar ul {
+    display: inline-flex;
+    list-style: none;
+    color: #fff;
+}
+.menu-bar ul li {
+    width: 120px;
+    margin: 10px;
+    padding: 10px;
+}
+.menu-bar ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+.menu-bar ul li:hover{
+    background: #799fb3;
+    border-radius: 3px;
+}
+
