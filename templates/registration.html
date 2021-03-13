@@ -3,48 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login2.css') }}">
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-
-                                div {
-  width: 500px;
-  background: #d4ff88;
-  padding: 50px;
-  opacity: 85%;
-  margin: 20px;
-}
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login2.css') }}">
 </head>
 <body>
-    <form action="/registration" method="POST">
-  <div class="login-box">
-    <h1>Register</h1>
-
-    {% block used_name %}{%  endblock %}
-    <div class="textbox">
-    <i class="fas fa-user"></i>
-    <label for="email"><b>Email</b></label>
-        <input type="email" placeholder="Enter Email" name="email" id="email" required><br><br></div>
-
-    <div class="textbox">
-    <i class="fas fa-lock"></i>
-    <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" id="psw" required><br></div>
-
-
-
-
-    <button class="btn" type="submit">Register</button><br><br>
-
-
-  <div class="container signin">
-    <p>Already have an account? <a href="/login">Sign in</a>.</p><br>
-      <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
-  </div>
-</form>
+    <div class="login-container">
+        <form action="/registration" method="POST">
+            <form class="login-box">
+                <h1>Register</h1>
+                {% block login_fail %}<br/>
+                {%  endblock %}<br/>
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="username"> E-mail: </label>
+                    <input type="email" id="username" name="username" placeholder="Enter Email" required/><br/><br/>
+                </div>
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label  for="password"> Password: </label>
+                    <input type ="password" id="password" name="password" placeholder="Enter Password" required/>
+                </div><br/><br/>
+                <button class="btn" type="submit">Register</button><br><br>
+                <div class="container signin">
+                    <p>Already have an account? <a href="/login">Sign in</a></p><br>
+                    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+                </div>
+            </form>
+        </form>
+    </div>
 </body>
 </html>
 
