@@ -35,7 +35,7 @@
                 <tr>
                     {% if list_of_questions.index(question) == 0 %}
                         {%for detail in question%}
-                            <th><form action="http://localhost:8000/list" method="GET">
+                            <th><form action="{{ url_for('display_list') }}" method="GET">
                             <input type="hidden" name="order_by" value="{{detail}}">{{ (detail.upper()).replace('_',' ') }}<br><br>
                             <button name="order_direction"style="background-color:#4CAF50" value="ASC">↑</button>
                             <button name="order_direction" style="background-color:#4CAF50" value="DESC">↓</button>
