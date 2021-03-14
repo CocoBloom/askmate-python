@@ -1,49 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
     <meta charset="UTF-8">
-     {% block head %}
-    <title>{%block title %}Add a question{% endblock %}</title>
-    {% endblock%}
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-        body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;
-        position: absolute;
-        top: 25%;
-        left: 30%;}
-
-        div {
-  width: 500px;
-  background: #d4ff88;
-  padding: 50px;
-  opacity: 85%;
-  margin: 20px;
-}
-    </style>
+    {% block head %}<title>{%block title %}Add a question{% endblock %}</title>{% endblock%}
 </head>
 <body>
-
-<div><form action="" method="post" enctype="multipart/form-data">
-    {% block header %}<h1>Ask a question</h1>{% endblock %}
-    {%block title_of_question%}<input type="text" name="questiontitle" placeholder="Question title" required><br>{%endblock%}
-    <textarea  name="questionbody" rows="10" cols="50" placeholder="Place your question here"  required>{% block questionbody %}{% endblock %}</textarea>
-    <br>
-    <button class="button" type="submit">Submit</button>
-    <button class="button" type="reset">Reset</button>
-    <input class="button" type=file name="questionimage">
-</form>
-</div>
-    <br><br>
+    <div>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% block header %}
+                <h1>Ask a question</h1>
+            {% endblock %}
+            {%block title_of_question%}
+                <label>
+                    <input type="text" name="questiontitle" placeholder="Question title" required>
+                </label>
+            {%endblock%}
+            <label>
+                <textarea  name="questionbody" rows="10" placeholder="Place your question here"  required>
+                    {% block questionbody %}{% endblock %}
+                </textarea>
+            </label>
+            <br/>
+            <button class="button" type="submit">Submit</button>
+            <button class="button" type="reset">Reset</button>
+            <input class="button" type=file name="questionimage"/>
+        </form>
+    </div>
+    <br/><br/>
     {% block link %}
-    <a href="/"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+        <a href="/"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
     {% endblock %}
 </body>
 </html>
