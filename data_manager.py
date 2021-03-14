@@ -19,7 +19,6 @@ def get_main_list(cursor, count):
 
 @connection.connection_handler
 def get_question_id(cursor: RealDictCursor, answer_id):
-    print("anser:id", answer_id)
     query = """
         SELECT *
         FROM answer
