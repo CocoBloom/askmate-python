@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, session, url_for, escape, flash
+from flask import Flask, request, render_template, redirect, session, url_for
 from functools import wraps
 import data_manager
 import os
@@ -52,8 +52,6 @@ def display_list():
     mode = request.args.get('order_by')
     direction = request.args.get('order_direction')
     if mode:
-        # default_mode = "submission_type"
-        # default_direction = "ASC"
         list_of_questions = data_manager.get_display_list(mode=mode, direction=direction)
     else:
         list_of_questions = data_manager.get_display_list()
@@ -146,16 +144,19 @@ def edit_answer(answer_id):
 @inject_variables('display_list')
 def edit_comment(comment_id):
     comment_details = data_manager.get_display_comment(comment_id)
+    answer_id = data_manager.get_id_from_comment(comment_id=comment_id)['answer_id']
+    print(comment_details['question_id'])
+    question_id = comment_details['question_id'] if comment_details['question_id'] is not None else (data_manager.get_question_id(answer_id))['question_id']
+    print("question_id")
+    print(question_id)
+    comment_details['question_id'] = question_id
     if request.method == 'GET':
+        print("comment details")
+        print(comment_details)
         return render_template("edit_comment.html", comment=comment_details)
     else:
         new_message = request.form['editbody']
         data_manager.update_comment(comment_id, new_message)
-        answer_id = data_manager.get_id_from_comment(comment_id=comment_id)['answer_id']
-        try:
-            question_id = (data_manager.get_question_id(answer_id))['question_id']
-        except:
-            question_id = (data_manager.get_id_from_comment(comment_id=comment_id))['question_id']
         return redirect('/question/' + str(question_id))
 
 
