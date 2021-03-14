@@ -145,14 +145,9 @@ def edit_answer(answer_id):
 def edit_comment(comment_id):
     comment_details = data_manager.get_display_comment(comment_id)
     answer_id = data_manager.get_id_from_comment(comment_id=comment_id)['answer_id']
-    print(comment_details['question_id'])
     question_id = comment_details['question_id'] if comment_details['question_id'] is not None else (data_manager.get_question_id(answer_id))['question_id']
-    print("question_id")
-    print(question_id)
     comment_details['question_id'] = question_id
     if request.method == 'GET':
-        print("comment details")
-        print(comment_details)
         return render_template("edit_comment.html", comment=comment_details)
     else:
         new_message = request.form['editbody']

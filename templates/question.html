@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
 <body>
     <div class="menu-bar">
         <ul>
@@ -15,11 +14,13 @@
             <li><a href="/list"><i class="fa fa-clone"></i>  All questions</a></li>
             <li><a href="add-question"><i class="fa fa-edit"></i>  Add question</a></li>
             <li><a href="/users"><i class="fa fa-users"></i>  List of Users</a></li>
-            <li> {% if 'username' in session %}
-                <a href="/logout"><i class="fa fa-user"></i> Log out</a>
+            <li>
+                {% if 'username' in session %}
+                    <a href="/logout"><i class="fa fa-user"></i> Log out</a>
                 {% else %}
-                <a href="/login"><i class="fa fa-user"></i>  Sign in</a></li>
+                    <a href="/login"><i class="fa fa-user"></i>  Sign in</a>
                 {% endif %}
+            </li>
         </ul>
     </div>
     <form action="/search" method="GET">
@@ -27,158 +28,216 @@
             <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
             <a class="buscar-btn">
             <i class="fa fa-search"></i></a>
-            </div>
-     </form>
-    <br><br><br>
-    <table>
-    <tr><td style="text-text-replace: uppercase;"><h1>{{ question.id }}. question</h1></td></tr>
-        <tr><td><h2> {{ question.title }}</h2></td></tr>
-        <tr><td>{{ question.message}}</td><td></td>
-                {% if question.image is not none and question.image != '' %}
-                    <td><img src="/static/{{ question.image }}" alt="caption" height="100"></td>
-                {% endif %}</tr>
-          <tr><td><br> {{ question.submission_time }} </td></tr>
-    </table><br>
-
-   <table>
-    <tr><td><p1>Tags of question:</p1></td></tr>
-    <tr>
-    {% for tag in tags %}
-        {% if tag.question_id == question_id %}
-            <td>{{ tag.name }}  </td>
-            <td><form action="/question/{{ question_id }}/tag/{{ tag.tag_id }}/delete" method="get">
-                <button class="button"><i class="fa fa-close"></i></button></form></td>
-        {% endif %}
-    {%  endfor %}</tr>
-    <tr><td>{% if user_of_question == session['username'] %}
-        <form action="/question/{{question_id}}/new-tag" ><button class="button">Add a new tag</button></form>
-    {% endif %}</td></tr>
-    </table><br>
-
+         </div>
+    </form>
+    <br/><br/><br/>
     <table>
         <tr>
-        <td><p1>Edit/Delete your question:</p1></td>
-            <td>{% if session['username'] == user_of_question %}
-            <form action="/question/{{question.id}}/edit" >
-                <button class="button">Edit</button>
-            </form>
+            <td style="text-text-replace: uppercase;"><h1>{{ question.id }}. question</h1></td>
+        </tr>
+        <tr>
+            <td><h2> {{ question.title }}</h2></td>
+        </tr>
+        <tr>
+            <td>{{ question.message}}</td>
+            <td></td>
+            {% if question.image is not none and question.image != '' %}
+                <td><img src="/static/{{ question.image }}" alt="caption" height="100"></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td><br/> {{ question.submission_time }} </td>
+        </tr>
+    </table><br/>
+    <table>
+        <tr>
+            <td><p1>Tags of question:</p1></td>
+        </tr>
+        <tr>
+            {% for tag in tags %}
+                {% if tag.question_id == question_id %}
+                    <td>{{ tag.name }}</td>
+                    <td>
+                        <form action="/question/{{ question_id }}/tag/{{ tag.tag_id }}/delete" method="get">
+                            <button class="button"><i class="fa fa-close"></i></button>
+                        </form>
+                    </td>
+                {% endif %}
+            {%  endfor %}
+        </tr>
+        <tr>
+            <td>
+                {% if user_of_question == session['username'] %}
+                    <form action="/question/{{question_id}}/new-tag" ><button class="button">Add a new tag</button></form>
+                {% endif %}
+            </td>
+        </tr>
+    </table><br/>
+    <table>
+        <tr>
+            <td>
+                <p1>Edit/Delete your question:</p1>
+            </td>
+        {% if session['username'] == user_of_question %}
+            <td>
+                <form action="/question/{{question.id}}/edit" >
+                    <button class="button">Edit</button>
+                </form>
             </td>
             <td>
-            <form action="/question/{{question.id}}/delete" method="post">
-                <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
-            </form>
-            {% endif %}</td>
-
+                <form action="/question/{{question.id}}/delete" method="post">
+                    <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
+                </form>
+            </td>
+        {% endif %}
         </tr>
-    </table><br>
-
-
+    </table><br/>
     <table>
-        <tr><td><h3>Comments of question</h3></td></tr>
+        <tr>
+            <td><h3>Comments of question</h3></td>
+        </tr>
             {% for comment in comments %}
                 {% if comment.question_id ==question_id %}
-                    <tr><td>{{comment.submission_time}}</td>
+                    <tr>
+                        <td>{{comment.submission_time}}</td>
                         <td>{{ comment.message }}<br></td>
                     {% if comment.edited_count is not none %}
                         <td width="120">Edited {{comment.edited_count}} times</td>
                     {% else %}
                         <td width="120"></td>
                     {% endif %}
-                {% if session['username'] == comment.user_name%}
-                    <td><form action="/comment/{{comment.id}}/edit" >
-                    <button class="button">Edit</button>
-                    </form></td>
-                {% endif %}
-                {% if session['username'] == comment.user_name or session['username'] == user_of_question%}
-                    <td><form action="/comments/{{comment.id}}/delete">
-                        <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
-                </form></td></tr>
-                {% endif %}
-                {% endif %}
-            {% endfor %}<tr>
-        <tr><td>
-            <form action="/question/{{question.id}}/new-comment" method="get">
-                <button class="button">Comment</button>
-            </form>
-            </td><td><td><a href="/tags">Check all tags</a></td></tr>
-    </table><br>
 
-    <table>
-        <tr><td><h3> Answers: </h3></td></tr>
-        <tr><td><form action="/question/{{question.id}}/new-answer"><button class="button">Add answer</button></form></td></tr>
-        {% for answer in answers %}
-            <tr style="height:100px" ><td>{{ answer.submission_time }} </td>
-            {% if answer.if_accepted == 1 %}
-                        <td style="color:crimson">
-                    {%  else %}
+                    {% if session['username'] == comment.user_name%}
                         <td>
-                    {%  endif %}
-            {{ answer.message }} </td>
-            <td>{% if answer.image is not none and answer.image != ''%}
-                    <img src="/{{ answer.image }}" alt="pimpirimpi" height="100">
-                {% endif %}
-            </td>
-            <td>
-                Votes: {{ answer.vote_number }}
-            </td>
-            <td>
-                <form action="/answer/{{answer.id}}/vote_up" >
-                <button><img src="/static/buttons/try.png" width="18"></button>
-                </form>
-            </td>
-            <td>
-                <form action="/answer/{{answer.id}}/vote_down" >
-                <button><img src="/static/buttons/try2.png" width="18"></button>
-                </form>
-            </td>
-            <td> {% if session['username'] == answer.user_name %}
-                <form action="/answer/{{ answer.id }}/edit">
-                <button class="button">Edit</button>
-                </form>
-            {% endif %}</td>
-            <td>{%  if session['username'] == answer.user_name or session['username'] == user_of_question %}
-                <form action="/answer/{{answer.id}}/delete" >
-                <button class="button"><i class="fa fa-trash"></i></button>
-                </form>
-            {%  endif %}</td>
-            <td>{% if session['username'] == user_of_question %}
-                <form action="{{url_for('accept_answer', answer_id= answer.id )}}" >
-                <button class="button"><i class="fas fa-umbrella-beach">
-                    {% if answer.if_accepted == 1 %}
-                        Remove state
-                    {%  else %}
-                        Accept
-                    {%  endif %}
-                </i></button></form>
-            {% endif %}</td></tr>
+                            <form action="/comment/{{comment.id}}/edit" >
+                                <button class="button">Edit</button>
+                            </form>
+                        </td>
+                    {% endif %}
 
-        <tr><td><p1>Comments of Answer:</p1></td></tr>
-         {%  for comment in comments %}
-            {% if comment.answer_id == answer.id %}
-                <tr><td>{{comment.submission_time}}</td>
-                    <td>{{ comment.message }}</td>
-                {% if comment.edited_count is not none %}
-                    <td width="120">Edited {{comment.edited_count}} times</td>
-                {% else %}
-                    <td width="120"></td>
+                    {% if session['username'] == comment.user_name or session['username'] == user_of_question%}
+                        <td>
+                            <form action="/comments/{{comment.id}}/delete">
+                                <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
+                            </form>
+                        </td>
+                    {% endif %}
+                    </tr>
                 {% endif %}
-                <td>{%  if session['username'] == comment.user_name %}
-                <form action="/comment/{{comment.id}}/edit" >
-                <button class="button">Edit</button>
+            {% endfor %}
+        <tr>
+            <td>
+                <form action="/question/{{question.id}}/new-comment" method="get">
+                    <button class="button">Comment</button>
                 </form>
-                {%  endif %}</td>
-                <td>{%  if session['username'] == comment.user_name or session['username'] == user_of_question %}
-                <form action="/comments/{{comment.id}}/delete">
-                    <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
+            </td>
+            <td>
+                <a href="/tags">Check all tags</a>
+            </td>
+        </tr>
+    </table><br/>
+    <table>
+        <tr>
+            <td><h3> Answers: </h3></td>
+        </tr>
+        <tr>
+            <td><form action="/question/{{question.id}}/new-answer"><button class="button">Add answer</button></form></td>
+        </tr>
+        {% for answer in answers %}
+            <tr style="height:100px" >
+                <td>{{ answer.submission_time }}</td>
+            {% if answer.if_accepted == 1 %}
+                <td style="color:crimson">
+            {%  else %}
+                <td>
+            {%  endif %}
+                    {{ answer.message }}</td>
+                <td>
+                    {% if answer.image is not none and answer.image != ''%}
+                        <img src="/{{ answer.image }}" alt="pimpirimpi" height="100">
+                    {% endif %}
+                </td>
+                <td>
+                    Votes: {{ answer.vote_number }}
+                </td>
+                <td>
+                    <form action="/answer/{{answer.id}}/vote_up" >
+                        <button><img src="/static/buttons/try.png" width="18"></button>
+                    </form>
+                </td>
+                <td>
+                    <form action="/answer/{{answer.id}}/vote_down" >
+                        <button><img src="/static/buttons/try2.png" width="18"></button>
+                    </form>
+                </td>
+                <td>
+                    {% if session['username'] == answer.user_name %}
+                        <form action="/answer/{{ answer.id }}/edit">
+                            <button class="button">Edit</button>
+                        </form>
+                    {% endif %}
+                </td>
+                <td>
+                    {%  if session['username'] == answer.user_name or session['username'] == user_of_question %}
+                        <form action="/answer/{{answer.id}}/delete" >
+                            <button class="button"><i class="fa fa-trash"></i></button>
+                        </form>
+                    {%  endif %}
+                </td>
+                <td>
+                    {% if session['username'] == user_of_question %}
+                        <form action="{{url_for('accept_answer', answer_id= answer.id )}}" >
+                            <button class="button"><i class="fas fa-umbrella-beach">
+                        {% if answer.if_accepted == 1 %}
+                            Remove state
+                        {%  else %}
+                            Accept
+                        {%  endif %}
+                            </i></button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        <tr>
+            <td><p>Comments of Answer:</p></td>
+        </tr>
+             {%  for comment in comments %}
+                {% if comment.answer_id == answer.id %}
+                    <tr>
+                        <td>{{comment.submission_time}}</td>
+                        <td>{{ comment.message }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    {% if comment.edited_count is not none %}
+                        <td style="width: 50px">Edited {{comment.edited_count}} times</td>
+                    {% else %}
+                        <td width="120"></td>
+                    {% endif %}
+                        <td>
+                            {%  if session['username'] == comment.user_name %}
+                                <form action="/comment/{{comment.id}}/edit" >
+                                    <button class="button">Edit</button>
+                                </form>
+                            {%  endif %}</td>
+                        <td>
+                            {%  if session['username'] == comment.user_name or session['username'] == user_of_question %}
+                            <form action="/comments/{{comment.id}}/delete">
+                                <button class="button" type="submit" value="Delete comment" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fa fa-trash"></i></button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            <td>
+                <form action="/answer/{{answer.id}}/new-comment">
+                    <button class="button">Add comment</button>
                 </form>
-                {% endif %}</td></tr>
-            {% endif %}
+            </td>
         {% endfor %}
-            <td><form action="/answer/{{answer.id}}/new-comment"><button class="button">Add comment</button></form></td>
-    {% endfor %}
     </table>
-
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
-
 </body>
 </html>

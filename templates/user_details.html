@@ -6,50 +6,50 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
 </head>
 <body>
-<div>
-    <label style="color:black;">User Details of {{ user_name }}:</label><br><br>
-    <table >
-        {% for detail in user_details %}
-            <tr><td> ID</td><td>{{ detail.id }}</td></tr>
-            <tr><td>User Name</td><td>{{ detail.user_name }}</td></tr>
-            <tr><td>Count of Questions</td><td>{{ detail.count_of_questions }}</td></tr>
-            <tr><td>Count of Answers</td><td>{{ detail.count_of_answers }}</td></tr>
-            <tr><td>Count of Comments</td><td>{{ detail.count_of_comments }}</td></tr>
-            <tr><td>Reputation</td><td>{{ detail.reputation }}</td></tr>
-        {%  endfor %}
-    </table><br/>
-
-    {% if session['username'] == user_name %}
-        <label>Questions that the user created:</label>
-        <table>
-            {% for question in user_questions %}
-                <tr>
-                    <td><a href="/question/{{ question.id }}" >{{ question.id }}</a></td>
-                    <td>{{ question.title }}</td>
-                </tr>
-            {% endfor %}
+    <div>
+        <label style="color:black;">User Details of {{ user_name }}:</label><br><br>
+        <table >
+            {% for detail in user_details %}
+                <tr><td> ID</td><td>{{ detail.id }}</td></tr>
+                <tr><td>User Name</td><td>{{ detail.user_name }}</td></tr>
+                <tr><td>Count of Questions</td><td>{{ detail.count_of_questions }}</td></tr>
+                <tr><td>Count of Answers</td><td>{{ detail.count_of_answers }}</td></tr>
+                <tr><td>Count of Comments</td><td>{{ detail.count_of_comments }}</td></tr>
+                <tr><td>Reputation</td><td>{{ detail.reputation }}</td></tr>
+            {%  endfor %}
         </table><br/>
-        <label>Answers that the user created: </label>
-        <table>
-            {% for answer in user_answers %}
-                <tr>
-                    <td><a href="/question/{{ answer.question_id }}">{{ answer.question_id }}</a></td>
-                    <td>{{ answer.message }}</td>
-                </tr>
-            {% endfor %}
-        </table><br>
-        <label>Comments that the user created:</label>
-        <table>
-            {% for comment in user_comments %}
-                <tr>
-                    <td><a href="/question/{{ comment.question_id }}">{{ comment.question_id }}</a></td>
-                    <td>{{ comment.message }}</td>
-                </tr>
-            {% endfor %}
-        </table><br>
-    {% endif %}
-    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
-</div>
+
+        {% if session['username'] == user_name %}
+            <label>Questions that the user created:</label>
+            <table>
+                {% for question in user_questions %}
+                    <tr>
+                        <td><a href="/question/{{ question.id }}" >{{ question.id }}</a></td>
+                        <td>{{ question.title }}</td>
+                    </tr>
+                {% endfor %}
+            </table><br/>
+            <label>Answers that the user created: </label>
+            <table>
+                {% for answer in user_answers %}
+                    <tr>
+                        <td><a href="/question/{{ answer.question_id }}">{{ answer.question_id }}</a></td>
+                        <td>{{ answer.message }}</td>
+                    </tr>
+                {% endfor %}
+            </table><br>
+            <label>Comments that the user created:</label>
+            <table>
+                {% for comment in user_comments %}
+                    <tr>
+                        <td><a href="/question/{{ comment.question_id }}">{{ comment.question_id }}</a></td>
+                        <td>{{ comment.message }}</td>
+                    </tr>
+                {% endfor %}
+            </table><br>
+        {% endif %}
+        <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+    </div>
 </body>
 </html>
 

@@ -3,98 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-        body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;}
-    .buscar-caja {
- position: absolute;
- top: 5.5%;
- left: 81%;
- transform: translate(-50%, -50%);
- background: #2f3640;
- height: 40px;
- border-radius: 40px;
- padding: 10px;
-}
-
-.buscar-caja:hover > .buscar-txt {
- width: 240px;
- padding: 0 6px;
-}
-
-.buscar-caja:hover > .buscar-btn {
- background: white;
- color: black;
-}
-
-.buscar-btn {
- color: #e84118;
- float: right;
- width: 40px;
- height: 40px;
- border-radius: 50%;
- background: #2f3640;
- display: flex;
- justify-content: center;
- align-items: center;
- transition: 0.4s;
- color: white;
- cursor: pointer;
-}
-
-.buscar-btn > i {
- font-size: 30px;
-}
-
-.buscar-txt {
- border: none;
- background: none;
- outline: none;
- float: right;
- padding: 0;
- color: white;
- font-size: 16px;
- transition: 0.4s;
- line-height: 40px;
- width: 0px;
- font-weight: bold;
-}
-.menu-bar {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    background: #3f87a6;
-    text-align: center;
-    border-radius: 40px;
-}
-.menu-bar ul {
-    display: inline-flex;
-    list-style: none;
-    color: #fff;
-}
-.menu-bar ul li {
-    width: 120px;
-    margin: 10px;
-    padding: 10px;
-}
-.menu-bar ul li a {
-    text-decoration: none;
-    color: #fff;
-}
-.menu-bar ul li:hover{
-    background: #799fb3;
-    border-radius: 3px;
-}</style>
 </head>
 <body>
     <div class="menu-bar">
@@ -103,35 +14,38 @@
             <li><a href="/list"><i class="fa fa-clone"></i>  All questions</a></li>
             <li><a href="add-question"><i class="fa fa-edit"></i>  Add question</a></li>
             <li><a href="/users"><i class="fa fa-users"></i>  List of Users</a></li>
-            <li> {% if 'username' in session %}
-                <a href="/logout"><i class="fa fa-user"></i> Log out</a>
+            <li>
+                {% if 'username' in session %}
+                    <a href="/logout"><i class="fa fa-user"></i> Log out</a>
                 {% else %}
-                <a href="/login"><i class="fa fa-user"></i>  Sign in</a></li>
+                    <a href="/login"><i class="fa fa-user"></i>  Sign in</a>
                 {% endif %}
+            </li>
         </ul>
     </div>
     <form action="/search" method="GET">
          <div class="buscar-caja">
-            <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
-            <a class="buscar-btn">
-            <i class="fa fa-search"></i></a>
-            </div>
-     </form>
+             <label>
+                 <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
+             </label>
+             <a class="buscar-btn">
+             <i class="fa fa-search"></i></a>
+         </div>
+    </form>
     <table>
-      <caption style="color: white">List of Users</caption>
+        <caption style="color: white">List of Users</caption>
         <thead>
             {% for user in users %}
-            <tr>
-                {% if users.index(user) == 0 %}
-                    {% for title in user %}
-                        <th>{{ (title.upper()).replace('_',' ') }}</th>
-                    {% endfor %}
-                {% endif %}
-             </tr>
+                <tr>
+                    {% if users.index(user) == 0 %}
+                        {% for title in user %}
+                            <th>{{ (title.upper()).replace('_',' ') }}</th>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
             {% endfor %}
         </thead>
-
-        {%  for user in users %}
+        {% for user in users %}
             <tbody>
                 <tr>
                     <td> {{ user.id }}</td>
@@ -143,8 +57,7 @@
                 </tr>
             </tbody>
         {% endfor %}
-</table><br>
-<a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
-
+    </table><br/>
+    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
 </body>
 </html>
