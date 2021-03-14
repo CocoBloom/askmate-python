@@ -1,38 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
     <meta charset="UTF-8">
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-        body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;
-        position: absolute;
-       top: 25%;
-        left: 30%;}
-    </style>
     <title>Edit comment</title>
 </head>
 <body>
-
-<div><form action="/comment/{{ comment.id }}/edit" method="post" enctype="multipart/form-data">
-    <h1>Edit your comment</h1>
-    <textarea name="editbody" rows="10" cols="50" >{{comment.message}}</textarea>
-    <br>
-    <button class="button" type="submit">Submit</button>
-    <button class="button" type="reset">Reset</button>
-    <br><br>
-
-</form>
+    <div>
+        <form action="/comment/{{ comment.id }}/edit" method="post" enctype="multipart/form-data">
+            <h1>Edit your comment</h1>
+            <label>
+                <textarea name="editbody" rows="10" cols="50" >{{comment.message}}</textarea>
+            </label>
+            <br/>
+            <button class="button" type="submit">Submit</button>
+            <button class="button" type="reset">Reset</button>
+            <br/><br/>
+        </form>
     </div>
     <a href="/question/{{ comment.question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
-
-
 </body>
 </html>
