@@ -339,15 +339,17 @@ def get_tags_of_question(cursor):
 
 @connection.connection_handler
 def search_for_question(cursor, search_text):
-    cursor.execute(f"""SELECT DISTINCT question.id,users.user_name,question.submission_time,question.view_number,question.vote_number,question.title,question.message,question.image, answer.message AS answer_message
-    FROM question
-    LEFT JOIN users
-    ON user_id=users.id
-    LEFT JOIN answer      
-    ON question.id = answer.question_id AND answer.message LIKE '%{search_text}%'
-    WHERE question.title LIKE '%{search_text}%' OR question.message LIKE '%{search_text}%'
-            OR answer.message LIKE '%{search_text}%'
-    ORDER BY question.submission_time""")
+    cursor.execute(f"""SELECT DISTINCT question.id, users.user_name,
+                    question.submission_time, question.view_number, 
+                question.vote_number, question.title, question.message,
+                question.image,answer.message AS answer_message FROM question
+                LEFT JOIN users
+                    ON user_id=users.id
+                LEFT JOIN answer      
+                    ON question.id = answer.question_id AND answer.message LIKE '%{search_text}%'
+                WHERE question.title LIKE '%{search_text}%' OR question.message LIKE '%{search_text}%'
+                        OR answer.message LIKE '%{search_text}%'
+                ORDER BY question.submission_time""")
     return cursor.fetchall()
 
 
