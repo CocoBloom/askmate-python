@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Question | Ask mate</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/old_style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -23,35 +23,35 @@
             </li>
         </ul>
     </div>
-    <form action="/search" method="GET">
-         <div class="buscar-caja">
-            <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
-            <a class="buscar-btn">
-            <i class="fa fa-search"></i></a>
-         </div>
-    </form>
+    <div class="form-container">
+        <form action="/search" method="GET">
+             <div class="caja">
+                <input type="text" name="search_text" class="txt" placeholder="Search question..."/>
+                 <button class="search-button"><i class="fa fa-search"></i></button>
+             </div>
+         </form>
+    </div>
     <br/><br/><br/>
     <table>
         <tr>
             <td style="text-text-replace: uppercase;"><h1>{{ question.id }}. question</h1></td>
         </tr>
         <tr>
-            <td><h2> {{ question.title }}</h2></td>
+            <td><h2>{{ question.title }}</h2></td>
         </tr>
         <tr>
-            <td>{{ question.message}}</td>
-            <td></td>
+            <td>{{ question.message }}</td>
             {% if question.image is not none and question.image != '' %}
-                <td><img src="/static/{{ question.image }}" alt="caption" height="100"></td>
+                <td><img src="/{{ question.image }}" alt="caption" height="100"></td>
             {% endif %}
         </tr>
         <tr>
-            <td><br/> {{ question.submission_time }} </td>
+            <td>{{ question.submission_time }}</td>
         </tr>
-    </table><br/>
+    </table>
     <table>
         <tr>
-            <td><p1>Tags of question:</p1></td>
+            <td><p>Tags of question:</p></td>
         </tr>
         <tr>
             {% for tag in tags %}
@@ -72,7 +72,7 @@
                 {% endif %}
             </td>
         </tr>
-    </table><br/>
+    </table>
     <table>
         <tr>
             <td>
@@ -91,7 +91,7 @@
             </td>
         {% endif %}
         </tr>
-    </table><br/>
+    </table>
     <table>
         <tr>
             <td><h3>Comments of question</h3></td>
@@ -135,7 +135,7 @@
                 <a href="/tags">Check all tags</a>
             </td>
         </tr>
-    </table><br/>
+    </table>
     <table>
         <tr>
             <td><h3> Answers: </h3></td>
@@ -154,7 +154,7 @@
                     {{ answer.message }}</td>
                 <td>
                     {% if answer.image is not none and answer.image != ''%}
-                        <img src="/{{ answer.image }}" alt="pimpirimpi" height="100">
+                        <img src="/{{ answer.image }}" alt="caption" height="100">
                     {% endif %}
                 </td>
                 <td>
