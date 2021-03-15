@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
-def inject_variables(page_if_false):
+def inject_variables(page_if_messagebox_cancel):
     def authenticate(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -29,13 +29,12 @@ def inject_variables(page_if_false):
                 if messagebox.askokcancel("Warning", "You need to login first", icon="error") == True:
                     page = 'login'
                 else:
-                    page = page_if_false
+                    page = page_if_messagebox_cancel
                 window.deiconify()
                 window.destroy()
                 window.quit()
                 return redirect(url_for(page, question_id=question_id))
             return func(*args, **kwargs)
-
         return wrapper
 
     return authenticate
@@ -262,9 +261,12 @@ def vote_down_answer(answer_id):
 
 @app.route('/search')
 def search_for_questions():
-    search_text = request.args.get('search_text').replace('+', ' ')
-    list_of_questions = data_manager.search_for_question(search_text)
-    return render_template("search.html", search_text=search_text, list_of_questions=list_of_questions)
+    if request.args.get('search_text') != '':
+        search_text = request.args.get('search_text').replace('+', ' ')
+        list_of_questions = data_manager.search_for_question(search_text)
+        return render_template("search.html", search_text=search_text, list_of_questions=list_of_questions)
+    else:
+        return redirect('/')
 
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
@@ -329,6 +331,7 @@ def login():
             is_matching = util.verify_password(password, reg_password)
             if is_matching:
                 session['username'] = request.form['username']
+                print(session)
                 return redirect(url_for('display_list'))
             else:
                 message = "Wrong e-mail or password!"
