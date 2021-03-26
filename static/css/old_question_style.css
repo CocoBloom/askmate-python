@@ -1,0 +1,67 @@
+* {
+    font-family: Chilanka, serif;
+    font-size: 20px !important;
+}
+
+body {
+    background-image: url('https://s3.amazonaws.com/noupe/2009/10/squidfingers.jpg');
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    top: 25%;
+    left: 30%;
+}
+
+.button {
+    background-color:  #3f87a6;
+    border: 2px solid white;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20%;
+}
+
+h1,h2,h3,td {
+    color:black;
+}
+
+table {
+    border-collapse: collapse;
+    border: 2px solid rgb(200, 200, 200);
+    letter-spacing: 1px;
+    font-family: sans-serif;
+    font-size: .8rem;
+}
+
+td,th {
+    border: 1px solid rgb(190, 190, 190);
+    padding: 5px 10px;
+}
+
+td {
+    text-align: center;
+}
+
+.vanish {
+    border-color: #e4f0f5;
+}
+
+div {
+    width: 500px;
+    background-color: rgba(212, 255, 136, 0.6);
+    padding: 50px;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+textarea {
+    font-size: 20px;
+    width: 100%;
+}

@@ -92,7 +92,6 @@ CREATE TABLE registration (
 );
 
 
-
 ALTER TABLE ONLY answer
     ADD CONSTRAINT pk_answer_id PRIMARY KEY (id);
 
@@ -113,7 +112,6 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY registration
     ADD CONSTRAINT pk_registration_id PRIMARY KEY (id);
-
 
 ALTER TABLE ONLY comment
     ADD CONSTRAINT fk_answer_id FOREIGN KEY (answer_id) REFERENCES answer(id);
@@ -143,21 +141,16 @@ ALTER TABLE ONLY registration
     ADD CONSTRAINT fk_user_name FOREIGN KEY (user_name) REFERENCES users(user_name);
 
 
-INSERT INTO users VALUES (1, 'ezegy@email', 0, 0, 0, 0);
-INSERT INTO registration VALUES (1, 'ezegy@email', 'lolka','2017-05-01 05:49:00');
+INSERT INTO users VALUES (1, 'coco@email', 0, 0, 0, 0);
+INSERT INTO registration VALUES (1, 'coco@email', 'lolka','2017-05-01 05:49:00');
 
 INSERT INTO question VALUES (0, 1, '2017-04-28 08:29:00', 29, 7, 'How to make lists in Python?', 'I am totally new to this, any hints?', NULL);
-INSERT INTO question VALUES (1, 1, '2017-04-29 09:19:00', 15, 9, 'Wordpress loading multiple jQuery Versions', 'I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $(".myBook").booklet();
-
-I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.
-
-BUT in my theme i also using jquery via webpack so the loading order is now following:
-
-jquery
-booklet
-app.js (bundled file with webpack, including jquery)', 'images/image1.png');
-INSERT INTO question VALUES (2, 1,'2017-05-01 10:41:00', 1364, 57, 'Drawing canvas with an image picked with Cordova Camera Plugin', 'I''m getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I''m on IOS, it throws errors such as cross origin issue, or that I''m trying to use an unknown format.
+INSERT INTO question VALUES (1, 1, '2017-04-29 09:19:00', 15, 9, 'Wordpress loading multiple jQuery Versions',
+                             'I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $(".myBook").booklet(); I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine. BUT in my theme i also using jquery via webpack so the loading order is now following: jquery, booklet, app.js (bundled file with webpack, including jquery)', 'images/image1.png');
+INSERT INTO question VALUES (2, 1,'2017-05-01 10:41:00', 1364, 57, 'Drawing canvas with an image picked with Cordova Camera Plugin',
+                             'I''m getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I''m on IOS, it throws errors such as cross origin issue, or that I''m trying to use an unknown format.
 ', NULL);
+
 SELECT pg_catalog.setval('question_id_seq', 2, true);
 
 INSERT INTO answer VALUES (1, 1,'2017-04-28 16:49:00', 4, 1, 'You need to use brackets: my_list = []', NULL, false);

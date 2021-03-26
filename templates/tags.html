@@ -3,54 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Tags</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='question_style2.css') }}">
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-        table {
-        border-collapse: collapse;
-        border: 2px solid rgb(200, 200, 200);
-        letter-spacing: 1px;
-        font-family: sans-serif;
-        font-size: .8rem;}
-
-        td,th {border: 1px solid rgb(190, 190, 190);
-        padding: 5px 10px;}
-
-        td {text-align: center;}
-
-        .vanish { border-color: #e4f0f5;)}
-        body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;
-        position: absolute;
-        top: 25%;
-        left: 30%;}
-                            div {
-  width: 500px;
-  background: #d4ff88;
-  padding: 50px;
-  opacity: 85%;
-  margin: 20px;
-}
-    </style>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
 </head>
 <body>
-<div>
-<caption>Tags</caption>
-<table>
-    {% for tag in count_of_tags %}
-    <tr><td>{{ tag.name }}</td>
-    <td>{{ tag.count }}</td></tr>
-    {% endfor %}
-</table>
-    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
-</div>
-
+    <div>
+        <caption>Tags</caption>
+        <table>
+            {% for tag in count_of_tags %}
+                <tr>
+                    <td>{{ tag.name }}</td>
+                    <td>{{ tag.count }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+    </div>
 </body>
 </html>

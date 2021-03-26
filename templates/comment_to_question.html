@@ -4,39 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Add comment to the question!</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-        body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;
-        position: absolute;
-        top: 25%;
-        left: 30%;}
-
-                        div {
-  width: 500px;
-  background: #d4ff88;
-  padding: 50px;
-  opacity: 85%;
-  margin: 20px;
-}
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
 </head>
 <body>
-    <div><form action="/question/{{ question_id }}/new-comment" method="post">
-        <h1>Add comment to the {{ question_id }}. question!</h1>
-        <textarea name="question_comment" rows="10" cols="50" placeholder="Place your comment here" required></textarea>
-        <br>
-        <button class="button" type="submit">Submit</button>
-        <button class="button" type="reset">Reset</button>
-        <br><br>
-        </form><a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+    <div>
+        <form action="/question/{{ question_id }}/new-comment" method="post">
+            <h1>Add comment to the {{ question_id }}. question!</h1>
+            <label>
+                <textarea name="question_comment" rows="10" placeholder="Place your comment here" required></textarea>
+            </label>
+            <br/>
+            <button class="button" type="submit">Submit</button>
+            <button class="button" type="reset">Reset</button>
+            <br/><br/>
+        </form>
+        <a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
     </div>
 </body>
 </html>

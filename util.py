@@ -9,6 +9,7 @@ def get_new_question_id(cursor):
     new_id = cursor.fetchall()[0]['max'] + 1
     return new_id
 
+
 @connection.connection_handler
 def get_new_answer_id(cursor):
     query = """SELECT MAX(id) from answer;"""
@@ -16,12 +17,14 @@ def get_new_answer_id(cursor):
     new_id = cursor.fetchall()[0]['max'] + 1
     return new_id
 
+
 @connection.connection_handler
 def get_new_comment_id(cursor):
     query = """SELECT MAX(id) from comment;"""
     cursor.execute(query)
     new_id = cursor.fetchall()[0]['max'] + 1
     return new_id
+
 
 def get_image_name(file):
     filename = file.filename
@@ -33,6 +36,7 @@ def get_image_name(file):
         image = ''
     return image
 
+
 @connection.connection_handler
 def get_new_tag_id(cursor):
     query = """SELECT MAX(id) from tag;"""
@@ -40,12 +44,14 @@ def get_new_tag_id(cursor):
     new_id = cursor.fetchall()[0]['max'] + 1
     return new_id
 
+
 @connection.connection_handler
 def get_new_user_id(cursor):
     query = """SELECT MAX(id) FROM users;"""
     cursor.execute(query)
     new_id = cursor.fetchall()[0]['max'] + 1
     return new_id
+
 
 @connection.connection_handler
 def get_new_registration_id(cursor):

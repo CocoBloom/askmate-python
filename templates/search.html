@@ -2,140 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/old_style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        *{
-            font-family: Chilanka;
-        }
-        body {
-    background-image: url('https://media0.giphy.com/media/3og0Ix8tq5zyKybM9a/giphy.gif?cid=ecf05e47f00bed5bfeac0975228f848a7e1c72dce6f2767a&rid=giphy.gif');
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-         background-size: cover;}
-
-    .buscar-caja {
- position: absolute;
- top: 5.5%;
- left: 81%;
- transform: translate(-50%, -50%);
- background: #2f3640;
- height: 40px;
- border-radius: 40px;
- padding: 10px;
-}
-
-.buscar-caja:hover > .buscar-txt {
- width: 240px;
- padding: 0 6px;
-}
-
-.buscar-caja:hover > .buscar-btn {
- background: white;
- color: black;
-}
-
-.buscar-btn {
- color: #e84118;
- float: right;
- width: 40px;
- height: 40px;
- border-radius: 50%;
- background: #2f3640;
- display: flex;
- justify-content: center;
- align-items: center;
- transition: 0.4s;
- color: white;
- cursor: pointer;
-}
-
-.buscar-btn > i {
- font-size: 30px;
-}
-
-.buscar-txt {
- border: none;
- background: none;
- outline: none;
- float: right;
- padding: 0;
- color: white;
- font-size: 16px;
- transition: 0.4s;
- line-height: 40px;
- width: 0px;
- font-weight: bold;
-}
-.menu-bar {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    background: #3f87a6;
-    text-align: center;
-    border-radius: 40px;
-}
-.menu-bar ul {
-    display: inline-flex;
-    list-style: none;
-    color: #fff;
-}
-.menu-bar ul li {
-    width: 120px;
-    margin: 10px;
-    padding: 10px;
-}
-.menu-bar ul li a {
-    text-decoration: none;
-    color: #fff;
-}
-.menu-bar ul li:hover{
-    background: #799fb3;
-    border-radius: 3px;
-}</style>
     <title>Search of questions</title>
 </head>
 <body>
+    <div class="askmate_container">
+        <caption id="caption"><img class="askmate" src="static/buttons/banner.png" alt="Ask-Question-Ask-Mate" width="120">
+            <p>ASK MATE</p>
+    </div>
     <div class="menu-bar">
         <ul>
-            <li><a href="/"><i class="fa fa-home"></i>  Home</a></li>
+            <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
             <li><a href="/list"><i class="fa fa-clone"></i>  All questions</a></li>
-            <li><a href="add-question"><i class="fa fa-edit"></i>  Add question</a></li>
+            <li><a href="{{ url_for('add_question') }}"><i class="fa fa-edit"></i>  Add question</a></li>
             <li><a href="/users"><i class="fa fa-users"></i>  List of Users</a></li>
-            <li> {% if 'username' in session %}
-                <a href="/logout"><i class="fa fa-user"></i> Log out</a>
+            <li>
+                {% if 'username' in session %}
+                    <a href="/logout"><i class="fa fa-user"></i>Log out</a>
                 {% else %}
-                <a href="/login"><i class="fa fa-user"></i>  Sign in</a></li>
+                    <a href="/login"><i class="fa fa-user"></i> Sign in</a>
                 {% endif %}
+            </li>
         </ul>
+    </div><br/><br/>
+    <div class="form-container">
+        <form action="/search" method="GET">
+             <div class="caja">
+                <input type="text" name="search_text" class="txt" placeholder="Search question..."/>
+                 <button class="search-button"><i class="fa fa-search"></i></button>
+             </div>
+         </form>
     </div>
-    <form action="/search" method="GET">
-         <div class="buscar-caja">
-            <input type="text" name="search_text" class="buscar-txt" placeholder="Search question..."/>
-            <a class="buscar-btn">
-            <i class="fa fa-search"></i></a>
-            </div>
-     </form>
-    <br><br><br><br>
     <table >
         <thead>
-            {% for question in list_of_questions%}
-                <tr>
-                    {% if list_of_questions.index(question) == 0 %}
-                        {%for detail in question%}
-                            <th><form action="http://localhost:8000/search" method="GET">
-                            <input type="hidden" name="order_by" value="{{detail}}">{{ (detail.upper()).replace('_',' ') }}
-                            </form> </th>
-                        {%endfor%}
-                    {% endif %}
-                </tr>
-            {%endfor%}
+        {% for question in list_of_questions%}
+            <tr>
+                {% if list_of_questions.index(question) == 0 %}
+                    {%for detail in question%}
+                        <th><form action="http://localhost:8000/search" method="GET">
+                        <input type="hidden" name="order_by" value="{{detail}}">{{ (detail.upper()).replace('_',' ') }}
+                        </form> </th>
+                    {%endfor%}
+                {% endif %}
+            </tr>
+        {%endfor%}
         </thead>
         {% for row in list_of_questions%}
             <tr>
-                <td width="50"><a href={{url_for('increase_view_number', question_id=row.id)}}> {{row.id}} </a></td>
+                <td width="50"><a href={{url_for('increase_view_number', question_id=row.id)}}>{{row.id}}</a></td>
                 <td width="50"><a href="/user/{{ row.user_name }}">{{ row.user_name }}</a></td>
                 <td width="150">{{ row.submission_time }}</td>
                 <td width="60">{{ row.view_number }}</td>
@@ -144,64 +60,61 @@
                 {% if search_text == row.title %}
                     <mark>{{search_text}}</mark>
                 {% elif search_text in row.title %}
-                    {% set title_list = row.title.split(search_text)%}
+                    {% set title_list = row.title.split(search_text) %}
                         {% for list_element in title_list%}
-                        {% if title_list.index(list_element) != 0%}
-                            <mark>{{search_text}}</mark>{{list_element}}
-                        {% else %}
-                            {{list_element}}
-                        {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {{ row.title }}
-                    {% endif %}
-                    </td>
-                <td width="200">
-                {% if search_text == row.message %}
-                    <mark>{{search_text}}</mark>
-                {% elif search_text in row.message %}
-                    {% set title_list = row.message.split(search_text)%}
-                        {% for list_element in title_list%}
-                        {% if title_list.index(list_element) != 0%}
-                            <mark>{{search_text}}</mark>{{list_element}}
-                        {% else %}
-                            {{list_element}}
-                        {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {{ row.message }}
-                    {% endif %}
-                    </td>
-                {% if row.image is not none and row.image != ''%}
-                    <td><img src="{{ row.image }}" alt="pimpirimpi" height="100"></td>
-                {%else%}
-                    <td height = "80"> </td>
-                {% endif %}
-                <td width="200">
-                {% if row.answer_message is none %}
-
-                {% else %}
-                    {% if search_text == row.answer_message %}
-                        <mark>{{search_text}}</mark>
-                    {% elif search_text in row.answer_message %}
-                        {% set title_list = row.answer_message.split(search_text)%}
-                            {% for list_element in title_list%}
                             {% if title_list.index(list_element) != 0%}
                                 <mark>{{search_text}}</mark>{{list_element}}
                             {% else %}
                                 {{list_element}}
                             {% endif %}
+                        {% endfor %}
+                {% else %}
+                    {{ row.title }}
+                {% endif %}
+                </td>
+                <td width="200">
+                    {% if search_text == row.message %}
+                        <mark>{{search_text}}</mark>
+                    {% elif search_text in row.message %}
+                        {% set title_list = row.message.split(search_text)%}
+                            {% for list_element in title_list%}
+                                {% if title_list.index(list_element) != 0%}
+                                    <mark>{{search_text}}</mark>{{list_element}}
+                                {% else %}
+                                    {{list_element}}
+                                {% endif %}
                             {% endfor %}
+                    {% else %}
+                        {{ row.message }}
+                    {% endif %}
+                </td>
+            {% if row.image is not none and row.image != ''%}
+                <td><img src="static/{{ row.image }}" alt="caption" height="100"></td>
+            {%else%}
+                <td height = "80"></td>
+            {% endif %}
+                <td width="200">
+                    {% if row.answer_message is not none %}
+                        {% if search_text == row.answer_message %}
+                            <mark>{{search_text}}</mark>
+                        {% elif search_text in row.answer_message %}
+                            {% set title_list = row.answer_message.split(search_text)%}
+                                {% for list_element in title_list%}
+                                    {% if title_list.index(list_element) != 0%}
+                                        <mark>{{search_text}}</mark>{{list_element}}
+                                    {% else %}
+                                        {{list_element}}
+                                    {% endif %}
+                                {% endfor %}
                         {% else %}
                             {{ row.answer_message }}
                         {% endif %}
                     {% endif %}
-                    </td>
+                </td>
             </tr>
-        {%endfor%}
+        {% endfor %}
     </table>
-    </form>
-    <br><br>
+    <br/><br/>
     <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
     {% block main %}{% endblock %}
 </body>
