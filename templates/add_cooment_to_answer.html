@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add comment to answer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
+</head>
+<body>
+    <div>
+        <form action="/answer/{{ answer_id }}/new-comment" method="post">
+            <label for="answer_comment">Write a comment</label><br>
+            <label>
+                <textarea name="answer_comment" rows="10" placeholder="Place your comment here" required></textarea>
+            </label>
+            <br/>
+            <button class="button" type="submit">Submit</button>
+            <button class="button" type="reset">Reset</button>
+            <br/><br/>
+        </form>
+        <a href="/question/{{ answer_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+    </div>
+</body>
+</html>

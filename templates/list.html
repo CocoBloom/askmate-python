@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of questions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/old_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="askmate_container">
+        <caption id="caption"><img class="askmate" src="static/buttons/banner.png" alt="Ask-Question-Ask-Mate" width="120">
+            <p>ASK MATE</p>
+    </div>
+    <div class="menu-bar">
+        <ul>
+            <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="/list"><i class="fa fa-clone"></i>  All questions</a></li>
+            <li><a href="{{ url_for('add_question') }}"><i class="fa fa-edit"></i>  Add question</a></li>
+            <li><a href="/users"><i class="fa fa-users"></i>  List of Users</a></li>
+            <li>
+                {% if 'username' in session %}
+                    <a href="/logout"><i class="fa fa-user"></i>Log out</a>
+                {% else %}
+                    <a href="/login"><i class="fa fa-user"></i> Sign in</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div><br/><br/>
+    <div class="form-container">
+        <form action="/search" method="GET">
+             <div class="caja">
+                <input type="text" name="search_text" class="txt" placeholder="Search question..."/>
+                 <button class="search-button"><i class="fa fa-search"></i></button>
+             </div>
+         </form>
+    </div>
+    <br><br>
+    <table class="questions">
+        <thead>
+            {% for question in list_of_questions%}
+                <tr>
+                    {% if list_of_questions.index(question) == 0 %}
+                        {%for detail in question%}
+                            <th><form action="{{ url_for('display_list') }}" method="GET">
+                            <input type="hidden" name="order_by" value="{{detail}}">{{ (detail.upper()).replace('_',' ') }}<br><br>
+                            <button class="order" name="order_direction"style="background-color:#4CAF50" value="ASC">↑</button>
+                            <button class="order" name="order_direction" style="background-color:#4CAF50" value="DESC">↓</button>
+                            </form> </th>
+                        {%endfor%}
+                        <th><text> VOTING </text></th>
+                    {% endif %}
+                </tr>
+            {%endfor%}
+        </thead>
+        {% for row in list_of_questions%}
+            <tr>
+                <td width="50"><a href="/question/{{row.id}}/increase_view_number"> {{row.id}} </a></td>
+                <td width="150"><a href="/user/{{ row.user_name }}" >{{ row.user_name }}</a></td>
+                <td width="150">{{ row.submission_time }}</td>
+                <td width="60">{{ row.view_number }}</td>
+                <td width="60">{{ row.vote_number }}</td>
+                <td width="100">{{ row.title }}</td>
+                <td width="200">{{ row.message }}</td>
+                {% if row.image is not none and row.image != ''%}
+                    <td><img src="/static/{{ row.image }}" alt="caption" height="100"></td>
+                {%else%}
+                    <td height = "80"> </td>
+                {% endif %}
+                <td width="40"><a href="/question/{{row.id}}/vote_up">
+                    <img src="static/buttons/try.png" width="18"></a>
+                    <a href="/question/{{row.id}}/vote_down" >
+                    <img src="static/buttons/try2.png" width="18"></a>
+                </td>
+            </tr>
+        {%endfor%}
+    </table>
+    {% block main %}{% endblock %}
+</body>
+</html>

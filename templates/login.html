@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login2.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <form action="/login" method="post" enctype="multipart/form-data">
+            <form class="login-box">
+                <h1>Login</h1>
+                {% block login_fail %}<br/>
+                {%  endblock %}<br/>
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="username"> E-mail: </label>
+                    <input type="email" id="username" name="username" placeholder="Enter Email" required/><br/><br/>
+                </div>
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label  for="password"> Password: </label>
+                    <input type ="password" id="password" name="password" placeholder="Enter Password" required/>
+                </div><br/><br/>
+                <text>If you are not registered:</text>
+                    <a href={{ url_for("registration") }}>Sign up here</a>
+                    <br/><br/>
+                <button class="btn" type="submit">Sign In</button><br/><br/>
+            </form>
+        </form>
+        <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+    </div>
+</body>
+</html>

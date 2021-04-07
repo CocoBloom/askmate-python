@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New tag</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
+</head>
+<body>
+    <div>
+        <form action="/question/{{ question_id }}/new-tag" method="POST">
+            <h1 style="color: white" for="tags">Choose a tag for the question:</h1>
+            {% block error_message %}{% endblock %}<br><br>
+            <label for="tag_name"></label>
+                <select name="tag_name" id="tag_name">
+                    {%  for tag in tags %}
+                        <option value={{ tag.name }}>{{ tag.name }}</option>
+                    {%  endfor %}
+                </select><br/><br/>
+            <label>
+                <textarea name="new_tag_type"></textarea>
+            </label>
+            <br/><br/>
+            <input class="button" type="submit" value="Submit">
+        </form>
+    </div>
+    <br/>
+    <a href="/question/{{ question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+</body>
+</html>

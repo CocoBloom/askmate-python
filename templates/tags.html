@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
+</head>
+<body>
+    <div>
+        <caption>Tags</caption>
+        <table>
+            {% for tag in count_of_tags %}
+                <tr>
+                    <td>{{ tag.name }}</td>
+                    <td>{{ tag.count }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to home page" width="35"></a>
+    </div>
+</body>
+</html>

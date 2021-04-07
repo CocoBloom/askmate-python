@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login2.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <form action="/registration" method="POST">
+            <form class="login-box">
+                <h1>Register</h1>
+                {% block login_fail %}<br/>
+                {%  endblock %}<br/>
+                <div class="textbox">
+                    <i class="fas fa-user"></i>
+                    <label for="email"> E-mail: </label>
+                    <input type="email" id="email" name="email" placeholder="Enter Email" required/><br/><br/>
+                </div>
+                <div class="textbox">
+                    <i class="fas fa-lock"></i>
+                    <label  for="psw"> Password: </label>
+                    <input type ="password" id="psw" name="psw" placeholder="Enter Password" required/>
+                </div><br/><br/>
+                <button class="btn" type="submit">Register</button><br><br>
+                <div class="container signin">
+                    <p>Already have an account? <a href="/login">Sign in</a></p><br>
+                    <a href="/list"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a>
+                </div>
+            </form>
+        </form>
+    </div>
+</body>
+</html>
+

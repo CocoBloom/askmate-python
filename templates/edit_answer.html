@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/question_style2.css') }}">
+    <title>Edit answer</title>
+</head>
+<body>
+    <div>
+        <form action="/answer/{{ answer[0].id }}/edit" method="post" enctype="multipart/form-data">
+            <h1>Edit your answer</h1>
+            <label>
+                <textarea name="editbody" rows="10">{{answer[0].message}}</textarea>
+            </label>
+            <br/>
+            <button class="button" type="submit">Submit</button>
+            <button class="button" type="reset">Reset</button>
+            <input class="button" type=file name="editimage">
+            <br/><br/>
+        </form>
+        <a href="/question/{{ answer[0].question_id }}"><img src="/static/buttons/whiteback.png" alt="Return to question page" width="35"></a></div>
+    </body>
+</html>
